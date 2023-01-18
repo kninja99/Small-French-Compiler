@@ -12,9 +12,9 @@
 | While or Do-While loops | |
 | If-then-else statements | |
 | Read and write statements | |
-| Comments | |
+| Comments | #This is a test comment |
 | Functions | |
 
 | Symbol in Language | Token Name |
 | -----------------:| -------------:|
-| int | INTEGER |
+| # | COMMENT |
