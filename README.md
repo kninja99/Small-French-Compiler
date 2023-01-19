@@ -13,7 +13,7 @@
 | If-then-else statements | si(5 == 5) { do something: } autre { do something else: } |
 | Read and write statements | |
 | Comments | #This is a test comment |
-| Functions | |
+| Functions | fonction addNumbers(ent x, ent y) { add numbers } |
 
 | Symbol in Language | Token Name |
 | -----------------:| -------------:|
@@ -32,4 +32,5 @@
 | >= | GREATERTHANEQUAL |
 | si | IF |
 | autre | ELSE |
+| fonction | FUNCTION |
 
