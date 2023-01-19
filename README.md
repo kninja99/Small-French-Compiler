@@ -7,7 +7,7 @@
 | Integer scalar Variables || 
 | One-dimensional arrays of integers | |
 | Assignment statements | |
-| Arithmetic operators (e.g., "+", "-", "*", "/") | |
+| Arithmetic operators (e.g., "+", "-", "*", "/") | 2 + 4 , 3-3, 6/3, 2*5 |
 | Relational operators (e.g., "<", "==", ">", "!=") |
 | While or Do-While loops | |
 | If-then-else statements | |
@@ -18,3 +18,8 @@
 | Symbol in Language | Token Name |
 | -----------------:| -------------:|
 | # | COMMENT |
+| + | ADD |
+| - | SUBTRACT |
+| / | DIVIDE |
+| * | MULTIPLICATION |
+| -> | ASSIGNMENT |
