@@ -40,4 +40,7 @@
 | autre | ELSE |
 | fonction | FUNCTION |
 | revenir | RETURN |
+| tandis | WHILE|
+| contribution | INPUT |
+| sortir | OUTPUT |
 
