@@ -4,11 +4,11 @@
 
 | Language Features | Code Examples |
 | -----------------:| -------------:|
-| Integer scalar Variables || 
+| Integer scalar Variables | ent num; ent x;| 
 | One-dimensional arrays of integers | |
-| Assignment statements | |
-| Arithmetic operators (e.g., "+", "-", "*", "/") | 2 + 4 , 3-3, 6/3, 2*5 |
-| Relational operators (e.g., "<", "==", ">", "!=") |
+| Assignment statements | ent num -> 5; ent y -> 23; |
+| Arithmetic operators (e.g., "+", "-", "*", "/") |ent x-> 2 + 4; ent y -> 3-3 ;ent k -> 6/3; |
+| Relational operators (e.g., "<", "==", ">", "!=") | 5 == 5 , 2 < 7, 2 > 7, 6 >= 2, 6 <= 2, 6 ~= 9|
 | While or Do-While loops | |
 | If-then-else statements | |
 | Read and write statements | |
@@ -17,9 +17,17 @@
 
 | Symbol in Language | Token Name |
 | -----------------:| -------------:|
+| ent | INTEGER |
 | # | COMMENT |
 | + | ADD |
 | - | SUBTRACT |
 | / | DIVIDE |
 | * | MULTIPLICATION |
 | -> | ASSIGNMENT |
+| < | LESSTHAN |
+| > | GREATERTHAN |
+| == | EQUAL |
+| ~= | NOTEQUAL |
+| <= | LESSTHANEQUAL |
+| >= | GREATERTHANEQUAL |
+
