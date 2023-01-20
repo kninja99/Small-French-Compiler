@@ -33,6 +33,10 @@ ELSE "autre"
 IF "si"
 
 %%
+{NUMBER} {printf("NUMBER %s", yytext);}
+{WORD} {printf("WORD %s", yytext);}
+{IDENTIFIER} {printf("IDENTIFIER %s", yytext);}
+{STARTBRACKET} {printf("STARTBRACKET %s", yytext);}
 {INTEGER}  {printf("INTEGER %s ", yytext);}      
 {COMMENT} {printf("COMMENT %s ", yytext);}
 {ADD} {printf("ADD %s ", yytext);}
