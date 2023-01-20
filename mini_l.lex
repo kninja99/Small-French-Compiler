@@ -2,7 +2,15 @@
 #include <stdio.h>
 %}
 
-INTEGER "ent"
+NUMBER [0-9]+
+WORD [A-Za-z]+
+IDENTIFIER [WORDNUMBER*]+
+STARTBRACKET [{]
+CLOSEBRACKET [}]
+ENDLINE [;]
+STARTPAREN [(]
+CLOSEPAREN [)]
+INTEGER [ent]
 COMMENT "#"
 ADD [+]
 SUBTRACT "-"
