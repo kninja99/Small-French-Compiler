@@ -3,7 +3,7 @@
 %}
 
 NUMBER [0-9]+
-IDENTIFIER [A-Za-z]+NUMBER]
+IDENTIFIER [[A-Za-z]+NUMBER*]
 STARTBRACKET [{]
 CLOSEBRACKET [}]
 ENDLINE [;]
@@ -22,8 +22,8 @@ EQUAL       "=="
 NOTEQUAL    "~="
 LESSTHANEQUAL "<="
 GREATERTHANEQUAL ">="
-OUTPUT "sortir"
-INPUT "contribution"
+OUTPUT "sortir <<"
+INPUT "contribution >>"
 DO "faire"
 WHILE "tandis"
 RETURN "revenir"
