@@ -3,7 +3,6 @@
 %}
 
 NUMBER [0-9]+
-IDENTIFIER [a-zA-Z+?NUMBER]
 STARTBRACKET [{]
 CLOSEBRACKET [}]
 ENDLINE [;]
@@ -31,10 +30,12 @@ FUNCTION "fonction"
 ELSE "autre"
 IF "si"
 SPACE [" "] 
+TRUE "true"
+FALSE "false"
+IDENTIFIER [a-zA-Z+?NUMBER]+
 
 %%
 {NUMBER} {printf("NUMBER %s\n", yytext);}
-{IDENTIFIER} {printf("IDENTIFIER %s\n", yytext);}
 {STARTBRACKET} {printf("STARTBRACKET %s\n", yytext);}
 {CLOSEBRACKET} {printf("CLOSEBRACKET %s\n", yytext);}
 {STARTPAREN} {printf("STARTPAREN %s\n", yytext);}
@@ -61,7 +62,10 @@ SPACE [" "]
 {ELSE} {printf("ELSE KEYWORD\n" );}
 {IF} {printf("IF KEYWORD\n");}
 {ENDLINE} {printf("ENDLINE %s\n",yytext);}
-{SPACE}
+{SPACE} {}
+{TRUE} {printf("TRUE TOKEN %s\n",yytext);}
+{FALSE} {printf("FALSE TOKEN %s\n",yytext);}
+{IDENTIFIER} {printf("IDENTIFIER %s\n", yytext);}
 . {printf("Not reconized %s\n",yytext);}
 %%
 
