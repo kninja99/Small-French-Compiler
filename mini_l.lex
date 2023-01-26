@@ -3,19 +3,18 @@
 %}
 
 NUMBER [0-9]+
-WORD [A-Za-z]+
-IDENTIFIER [WORDNUMBER*]+
+IDENTIFIER [A-Za-z]+NUMBER]
 STARTBRACKET [{]
 CLOSEBRACKET [}]
 ENDLINE [;]
-STARTPAREN [(]
+STARTPAREN [(]s
 CLOSEPAREN [)]
-INTEGER [ent]
+INTEGER "ent"
 COMMENT "#"
 ADD [+]
 SUBTRACT "-"
 DIVIDE "/"
-MULTIPLICATION "*"
+MULTIPLICATION ""
 ASSIGNMENT "->"
 LESSTHAN   "<"
 GREATERTHAN ">"
@@ -34,13 +33,9 @@ IF "si"
 
 %%
 {NUMBER} {printf("NUMBER %s", yytext);}
-{WORD} {printf("WORD %s", yytext);}
 {IDENTIFIER} {printf("IDENTIFIER %s", yytext);}
 {STARTBRACKET} {printf("STARTBRACKET %s", yytext);}
-{CLOSEBRACKET} {printf("CLOSEBRACKET %s", yytext);}
-{STARTPAREN} {printf("STARTPAREN %s", yytext);}
-{CLOSEPAREN} {printf("CLOSEPAREN %s", yytext);}
-{INTEGER}  {printf("INTEGER %s ", yytext);}      
+{INTEGER}  {printf("INTEGER %s ", yytext);}
 {COMMENT} {printf("COMMENT %s ", yytext);}
 {ADD} {printf("ADD %s ", yytext);}
 {SUBTRACT} {printf("SUBTRACT %s ", yytext);}
@@ -61,10 +56,11 @@ IF "si"
 {FUNCTION} {printf("FUNCTION %s ", yytext);}
 {ELSE} {printf("ELSE KEYWORD" );}
 {IF} {printf("IF KEYWORD");}
+{ENDLINE} {printf("ENDLINE KEYWORD");}
 %%
 
-main(int argc, char *argv[]){
-    FILE *fp = fopen(argv[1],"r");
+main(int argc, char argv[]){
+    FILEfp = fopen(argv[1],"r");
     yyin = fp;
     yylex();
 }
