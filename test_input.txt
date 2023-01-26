@@ -1,5 +1,5 @@
 ent
-
+#this is a comment
 fonction factorial(ent x){
     ent result -> 1;
     ent i -> 1;

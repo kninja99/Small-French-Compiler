@@ -9,7 +9,7 @@ ENDLINE [;]
 STARTPAREN [(]
 CLOSEPAREN [)]
 INTEGER "ent"
-COMMENT "#"
+COMMENT #.*\n
 ADD [+]
 SUBTRACT "-"
 DIVIDE "/"
@@ -66,6 +66,7 @@ IDENTIFIER [a-zA-Z+?NUMBER]+
 {TRUE} {printf("TRUE TOKEN %s\n",yytext);}
 {FALSE} {printf("FALSE TOKEN %s\n",yytext);}
 {IDENTIFIER} {printf("IDENTIFIER %s\n", yytext);}
+{COMMENT} {printf("COMMENT %s\n",yytext);}
 . {printf("Not reconized %s\n",yytext);}
 %%
 
