@@ -35,6 +35,9 @@ IF "si"
 {NUMBER} {printf("NUMBER %s", yytext);}
 {IDENTIFIER} {printf("IDENTIFIER %s", yytext);}
 {STARTBRACKET} {printf("STARTBRACKET %s", yytext);}
+{CLOSEBRACKET} {printf("CLOSEBRACKET %s", yytext);}
+{STARTPAREN} {printf("STARTPAREN %s", yytext);}
+{CLOSEPAREN} {printf("CLOSEPAREN %s", yytext);}
 {INTEGER}  {printf("INTEGER %s ", yytext);}
 {COMMENT} {printf("COMMENT %s ", yytext);}
 {ADD} {printf("ADD %s ", yytext);}
@@ -56,7 +59,7 @@ IF "si"
 {FUNCTION} {printf("FUNCTION %s ", yytext);}
 {ELSE} {printf("ELSE KEYWORD" );}
 {IF} {printf("IF KEYWORD");}
-{ENDLINE} {printf("ENDLINE KEYWORD");}
+{ENDLINE} {printf("ENDLINE %s",yytext);}
 %%
 
 main(int argc, char *argv[]){
