@@ -3,11 +3,11 @@
 %}
 
 NUMBER [0-9]+
-IDENTIFIER [[A-Za-z]+NUMBER*]
+IDENTIFIER [[a-zA-Z]*]
 STARTBRACKET [{]
 CLOSEBRACKET [}]
 ENDLINE [;]
-STARTPAREN [(]s
+STARTPAREN [(]
 CLOSEPAREN [)]
 INTEGER "ent"
 COMMENT "#"
@@ -30,36 +30,39 @@ RETURN "revenir"
 FUNCTION "fonction"
 ELSE "autre"
 IF "si"
+SPACE [" "] 
 
 %%
-{NUMBER} {printf("NUMBER %s", yytext);}
-{IDENTIFIER} {printf("IDENTIFIER %s", yytext);}
-{STARTBRACKET} {printf("STARTBRACKET %s", yytext);}
-{CLOSEBRACKET} {printf("CLOSEBRACKET %s", yytext);}
-{STARTPAREN} {printf("STARTPAREN %s", yytext);}
-{CLOSEPAREN} {printf("CLOSEPAREN %s", yytext);}
+{NUMBER} {printf("NUMBER %s\n", yytext);}
+{IDENTIFIER} {printf("IDENTIFIER %s\n", yytext);}
+{STARTBRACKET} {printf("STARTBRACKET %s\n", yytext);}
+{CLOSEBRACKET} {printf("CLOSEBRACKET %s\n", yytext);}
+{STARTPAREN} {printf("STARTPAREN %s\n", yytext);}
+{CLOSEPAREN} {printf("CLOSEPAREN %s\n", yytext);}
 {INTEGER}  {printf("INTEGER %s ", yytext);}
-{COMMENT} {printf("COMMENT %s ", yytext);}
-{ADD} {printf("ADD %s ", yytext);}
-{SUBTRACT} {printf("SUBTRACT %s ", yytext);}
-{DIVIDE} {printf("DIVIDE %s ", yytext);} 
-{MULTIPLICATION} {printf("MULTIPLICATION %s ", yytext);} 
-{ASSIGNMENT} {printf("ASSIGNMENT %s ", yytext);}
-{LESSTHAN}   {printf("LESSTHAN %s ", yytext);}
-{GREATERTHAN} {printf("GREATERTHAN %s ", yytext);}
-{EQUAL}       {printf("EQUAL %s ", yytext);}
-{NOTEQUAL}    {printf("NOTEQUAL %s ", yytext);}
-{LESSTHANEQUAL} {printf("LESSTHANEQUAL %s ", yytext);}
-{GREATERTHANEQUAL} {printf("GREATERTHANEQUAL %s ", yytext);}
-{OUTPUT} {printf("OUTPUT %s ", yytext);}
-{INPUT} {printf("INPUT %s ", yytext);}
-{DO} {printf("DO %s ", yytext);}
-{WHILE} {printf("WHILE %s ", yytext);}
-{RETURN} {printf("RETURN %s ", yytext);}
-{FUNCTION} {printf("FUNCTION %s ", yytext);}
-{ELSE} {printf("ELSE KEYWORD" );}
-{IF} {printf("IF KEYWORD");}
-{ENDLINE} {printf("ENDLINE %s",yytext);}
+{COMMENT} {printf("COMMENT %s \n", yytext);}
+{ADD} {printf("ADD %s \n", yytext);}
+{SUBTRACT} {printf("SUBTRACT %s \n", yytext);}
+{DIVIDE} {printf("DIVIDE %s \n", yytext);} 
+{MULTIPLICATION} {printf("MULTIPLICATION %s \n", yytext);} 
+{ASSIGNMENT} {printf("ASSIGNMENT %s \n", yytext);}
+{LESSTHAN}   {printf("LESSTHAN %s \n", yytext);}
+{GREATERTHAN} {printf("GREATERTHAN %s \n", yytext);}
+{EQUAL}       {printf("EQUAL %s \n", yytext);}
+{NOTEQUAL}    {printf("NOTEQUAL %s \n", yytext);}
+{LESSTHANEQUAL} {printf("LESSTHANEQUAL %s \n", yytext);}
+{GREATERTHANEQUAL} {printf("GREATERTHANEQUAL %s \n", yytext);}
+{OUTPUT} {printf("OUTPUT %s \n", yytext);}
+{INPUT} {printf("INPUT %s \n", yytext);}
+{DO} {printf("DO %s \n", yytext);}
+{WHILE} {printf("WHILE %s \n", yytext);}
+{RETURN} {printf("RETURN %s \n", yytext);}
+{FUNCTION} {printf("FUNCTION %s \n", yytext);}
+{ELSE} {printf("ELSE KEYWORD\n" );}
+{IF} {printf("IF KEYWORD\n");}
+{ENDLINE} {printf("ENDLINE %s\n",yytext);}
+{SPACE}
+. {printf("Not reconized %s\n",yytext);}
 %%
 
 main(int argc, char *argv[]){
