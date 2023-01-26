@@ -1,1 +1,17 @@
 ent
+
+fonction factorial(ent x){
+    ent result -> 1;
+    ent i -> 1;
+    faire {
+        result -> result * i;
+        i -> i + 1;
+    } tandis (i <= n);
+    revenir result;
+}
+
+fonction main () {
+    ent num1 -> 7;
+    sortir << factorial(num1);
+    revenir 0;
+}
