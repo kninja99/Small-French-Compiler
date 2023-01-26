@@ -54,4 +54,4 @@
 | sortir | OUTPUT |
 
 ## Some Language Rules
-  A valid identifier can start with a lower case or upper case letter. An identifier may contain a number, but only after the last letter the last character. Identifiers also don't have a length limit. The language is case sensitive. Whitespaces are ignored and are not significant. We will signify that a line of code has ended with a semicolon and code blocks will be wraped in curley braces ex: { # some code }.
+  A valid identifier can start with a lower case or upper case letter. An identifier may contain a number, but only after the first character. Identifiers also don't have a length limit. The language is case sensitive. Whitespaces are ignored and are not significant. We will signify that a line of code has ended with a semicolon and code blocks will be wraped in curley braces ex: { # some code }.
