@@ -37,6 +37,9 @@ IF "si"
 {WORD} {printf("WORD %s", yytext);}
 {IDENTIFIER} {printf("IDENTIFIER %s", yytext);}
 {STARTBRACKET} {printf("STARTBRACKET %s", yytext);}
+{CLOSEBRACKET} {printf("CLOSEBRACKET %s", yytext);}
+{STARTPAREN} {printf("STARTPAREN %s", yytext);}
+{CLOSEPAREN} {printf("CLOSEPAREN %s", yytext);}
 {INTEGER}  {printf("INTEGER %s ", yytext);}      
 {COMMENT} {printf("COMMENT %s ", yytext);}
 {ADD} {printf("ADD %s ", yytext);}
