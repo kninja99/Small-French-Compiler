@@ -1,4 +1,3 @@
-ent
 #this is a comment
 fonction factorial(ent x){
     ent result -> 1;
@@ -9,7 +8,7 @@ fonction factorial(ent x){
     } tandis (i <= n);
     revenir result;
 }
-
+ab?2
 fonction main () {
     ent num1 -> 7;
     sortir << factorial(num1);

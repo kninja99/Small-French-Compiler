@@ -29,10 +29,10 @@ RETURN "revenir"
 FUNCTION "fonction"
 ELSE "autre"
 IF "si"
-SPACE [" "] 
+SPACE [" "\t] 
 TRUE "true"
 FALSE "false"
-IDENTIFIER [a-zA-Z+?NUMBER]+
+IDENTIFIER [a-zA-Z]+[0-9]*
 
 %%
 {NUMBER} {printf("NUMBER %s\n", yytext);}
