@@ -1,6 +1,7 @@
 %{
 #include <stdio.h>
 int lineNum = 1;
+int charPos = 0;
 %}
 
 NUMBER [0-9]+
@@ -10,7 +11,7 @@ ENDLINE [;]
 STARTPAREN [(]
 CLOSEPAREN [)]
 INTEGER "ent"
-COMMENT #.*\n
+COMMENT ^#.*
 ADD [+]
 SUBTRACT "-"
 DIVIDE "/"
@@ -35,43 +36,43 @@ TRUE "true"
 FALSE "false"
 IDENTIFIER [a-zA-Z]+[0-9]*[a-zA-Z]*
 INVALID ^[0-9][a-zA-Z]+
-NEWLINE [\n]
+NEWLINE \n
 
 %%\
-{NEWLINE} {++lineNum;}
-{INVALID} {printf("ERROR at line %d in %s\n",lineNum,yytext);}
-{NUMBER} {printf("NUMBER %s\n", yytext);}
-{STARTBRACKET} {printf("STARTBRACKET %s\n", yytext);}
-{CLOSEBRACKET} {printf("CLOSEBRACKET %s\n", yytext);}
-{STARTPAREN} {printf("STARTPAREN %s\n", yytext);}
-{CLOSEPAREN} {printf("CLOSEPAREN %s\n", yytext);}
-{INTEGER}  {printf("INTEGER %s ", yytext);}
-{ADD} {printf("ADD %s \n", yytext);}
-{SUBTRACT} {printf("SUBTRACT %s \n", yytext);}
-{DIVIDE} {printf("DIVIDE %s \n", yytext);} 
-{MULTIPLICATION} {printf("MULTIPLICATION %s \n", yytext);} 
-{ASSIGNMENT} {printf("ASSIGNMENT %s \n", yytext);}
-{LESSTHAN}   {printf("LESSTHAN %s \n", yytext);}
-{GREATERTHAN} {printf("GREATERTHAN %s \n", yytext);}
-{EQUAL}       {printf("EQUAL %s \n", yytext);}
-{NOTEQUAL}    {printf("NOTEQUAL %s \n", yytext);}
-{LESSTHANEQUAL} {printf("LESSTHANEQUAL %s \n", yytext);}
-{GREATERTHANEQUAL} {printf("GREATERTHANEQUAL %s \n", yytext);}
-{OUTPUT} {printf("OUTPUT %s \n", yytext);}
-{INPUT} {printf("INPUT %s \n", yytext);}
-{DO} {printf("DO %s \n", yytext);}
-{WHILE} {printf("WHILE %s \n", yytext);}
-{RETURN} {printf("RETURN %s \n", yytext);}
-{FUNCTION} {printf("FUNCTION %s \n", yytext);}
-{ELSE} {printf("ELSE KEYWORD\n" );}
-{IF} {printf("IF KEYWORD\n");}
-{ENDLINE} {printf("ENDLINE %s\n",yytext);}
+{NUMBER} {printf("NUMBER %s\n", yytext); charPos+=yyleng;}
+{STARTBRACKET} {printf("STARTBRACKET %s\n", yytext); charPos+=yyleng;}
+{CLOSEBRACKET} {printf("CLOSEBRACKET %s\n", yytext); charPos+=yyleng;}
+{STARTPAREN} {printf("STARTPAREN %s\n", yytext); charPos+=yyleng;}
+{CLOSEPAREN} {printf("CLOSEPAREN %s\n", yytext); charPos+=yyleng;}
+{INTEGER}  {printf("INTEGER %s \n", yytext); charPos+=yyleng;}
+{ADD} {printf("ADD %s \n", yytext); charPos+=yyleng;}
+{SUBTRACT} {printf("SUBTRACT %s \n", yytext); charPos+=yyleng;}
+{DIVIDE} {printf("DIVIDE %s \n", yytext); charPos+=yyleng;} 
+{MULTIPLICATION} {printf("MULTIPLICATION %s \n", yytext); charPos+=yyleng;} 
+{ASSIGNMENT} {printf("ASSIGNMENT %s \n", yytext); charPos+=yyleng;}
+{LESSTHAN}   {printf("LESSTHAN %s \n", yytext); charPos+=yyleng;}
+{GREATERTHAN} {printf("GREATERTHAN %s \n", yytext); charPos+=yyleng;}
+{EQUAL}       {printf("EQUAL %s \n", yytext); charPos+=yyleng;}
+{NOTEQUAL}    {printf("NOTEQUAL %s \n", yytext); charPos+=yyleng;}
+{LESSTHANEQUAL} {printf("LESSTHANEQUAL %s \n", yytext); charPos+=yyleng;}
+{GREATERTHANEQUAL} {printf("GREATERTHANEQUAL %s \n", yytext); charPos+=yyleng;}
+{OUTPUT} {printf("OUTPUT %s \n", yytext); charPos+=yyleng;}
+{INPUT} {printf("INPUT %s \n", yytext); charPos+=yyleng;}
+{DO} {printf("DO %s \n", yytext); charPos+=yyleng;}
+{WHILE} {printf("WHILE %s \n", yytext); charPos+=yyleng;}
+{RETURN} {printf("RETURN %s \n", yytext); charPos+=yyleng;}
+{FUNCTION} {printf("FUNCTION %s \n", yytext); charPos+=yyleng;}
+{ELSE} {printf("ELSE KEYWORD\n" ); charPos+=yyleng;}
+{IF} {printf("IF KEYWORD\n"); charPos+=yyleng;}
+{ENDLINE} {printf("ENDLINE %s\n",yytext); charPos+=yyleng;}
 {SPACE} {}
-{TRUE} {printf("TRUE TOKEN %s\n",yytext);}
-{FALSE} {printf("FALSE TOKEN %s\n",yytext);}
-{IDENTIFIER} {printf("IDENTIFIER %s\n", yytext);}
-{COMMENT} {++lineNum;}
-. {printf("ERROR at line %d in %s\n",lineNum,yytext);}
+{TRUE} {printf("TRUE TOKEN %s\n",yytext); charPos+=yyleng;}
+{FALSE} {printf("FALSE TOKEN %s\n",yytext); charPos+=yyleng;}
+{IDENTIFIER} {printf("IDENTIFIER %s\n", yytext); charPos+=yyleng;}
+{COMMENT} {}
+{NEWLINE} {++lineNum; charPos = 0;}
+{INVALID} {printf("ERROR at line %d pos %d in %s\n",lineNum,charPos,yytext);}
+. {printf("ERROR at line %d pos %d in %s\n",lineNum,charPos,yytext);}
 %%
 
 main(int argc, char *argv[]){

@@ -1,23 +1,18 @@
-# Big hairy gorillas
-ID;
-Id;
-id;
-id7;
-i7d;
-7id;
-
+ent
+#this is a comment
+7i2
 fonction factorial(ent x){
     ent result -> 1;
     ent i -> 1;
     faire {
         result -> result * i;
         i -> i + 1;
-        i -> i/2;
-        i-> i-0;
+        i-> i-1;
+        i-> i/1;
     } tandis (i <= n);
     revenir result;
 }
-ab?2
+this should bre&k something
 fonction main () {
     ent num1 -> 7;
     sortir << factorial(num1);
