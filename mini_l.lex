@@ -29,10 +29,10 @@ RETURN "revenir"
 FUNCTION "fonction"
 ELSE "autre"
 IF "si"
-SPACE [" "\t] 
+SPACE [" "] 
 TRUE "true"
 FALSE "false"
-IDENTIFIER [a-zA-Z]+[0-9]*
+IDENTIFIER [a-zA-Z+?NUMBER]+
 
 %%
 {NUMBER} {printf("NUMBER %s\n", yytext);}
@@ -41,7 +41,6 @@ IDENTIFIER [a-zA-Z]+[0-9]*
 {STARTPAREN} {printf("STARTPAREN %s\n", yytext);}
 {CLOSEPAREN} {printf("CLOSEPAREN %s\n", yytext);}
 {INTEGER}  {printf("INTEGER %s ", yytext);}
-{COMMENT} {printf("COMMENT %s \n", yytext);}
 {ADD} {printf("ADD %s \n", yytext);}
 {SUBTRACT} {printf("SUBTRACT %s \n", yytext);}
 {DIVIDE} {printf("DIVIDE %s \n", yytext);} 
@@ -66,7 +65,7 @@ IDENTIFIER [a-zA-Z]+[0-9]*
 {TRUE} {printf("TRUE TOKEN %s\n",yytext);}
 {FALSE} {printf("FALSE TOKEN %s\n",yytext);}
 {IDENTIFIER} {printf("IDENTIFIER %s\n", yytext);}
-{COMMENT} {printf("COMMENT %s\n",yytext);}
+{COMMENT}
 . {printf("Not reconized %s\n",yytext);}
 %%
 
