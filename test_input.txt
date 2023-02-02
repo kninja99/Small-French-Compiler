@@ -12,7 +12,7 @@ fonction factorial(ent x){
     } tandis (i <= n);
     revenir result;
 }
-this should bre&k something
+96invalid
 fonction main () {
     ent num1 -> 7;
     sortir << factorial(num1);

@@ -34,8 +34,8 @@ IF "si"
 SPACE [" "] 
 TRUE "true"
 FALSE "false"
-IDENTIFIER [a-zA-Z]+[0-9]*[a-zA-Z]*
-INVALID ^[0-9][a-zA-Z]+
+IDENTIFIER [a-zA-Z]+[a-zA-Z0-9]*
+INVALID [0-9]+[a-zA-Z0-9]+
 NEWLINE \n
 
 %%\
