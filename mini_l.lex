@@ -32,9 +32,11 @@ IF "si"
 SPACE [" "] 
 TRUE "true"
 FALSE "false"
-IDENTIFIER [a-zA-Z+?NUMBER]+
+IDENTIFIER [a-zA-Z]+[0-9]*[a-zA-Z]*
+INVALID ^[0-9][a-zA-Z]+
 
 %%
+{INVALID} {printf("Invalid identifier %s\n",yytext);}
 {NUMBER} {printf("NUMBER %s\n", yytext);}
 {STARTBRACKET} {printf("STARTBRACKET %s\n", yytext);}
 {CLOSEBRACKET} {printf("CLOSEBRACKET %s\n", yytext);}

@@ -1,10 +1,19 @@
-#this is a comment
+#Code below checks for valid and invalid identifiers
+ID;
+Id;
+id;
+id7;
+i7d;
+7id;
+
 fonction factorial(ent x){
     ent result -> 1;
     ent i -> 1;
     faire {
         result -> result * i;
         i -> i + 1;
+        i -> i/2;
+        i-> i-0;
     } tandis (i <= n);
     revenir result;
 }
