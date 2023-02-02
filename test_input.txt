@@ -1,4 +1,4 @@
-#Code below checks for valid and invalid identifiers
+# Big hairy gorillas
 ID;
 Id;
 id;

@@ -1,5 +1,6 @@
 %{
 #include <stdio.h>
+int lineNum = 1;
 %}
 
 NUMBER [0-9]+
@@ -34,9 +35,11 @@ TRUE "true"
 FALSE "false"
 IDENTIFIER [a-zA-Z]+[0-9]*[a-zA-Z]*
 INVALID ^[0-9][a-zA-Z]+
+NEWLINE [\n]
 
-%%
-{INVALID} {printf("Invalid identifier %s\n",yytext);}
+%%\
+{NEWLINE} {++lineNum;}
+{INVALID} {printf("ERROR at line %d in %s\n",lineNum,yytext);}
 {NUMBER} {printf("NUMBER %s\n", yytext);}
 {STARTBRACKET} {printf("STARTBRACKET %s\n", yytext);}
 {CLOSEBRACKET} {printf("CLOSEBRACKET %s\n", yytext);}
@@ -67,8 +70,8 @@ INVALID ^[0-9][a-zA-Z]+
 {TRUE} {printf("TRUE TOKEN %s\n",yytext);}
 {FALSE} {printf("FALSE TOKEN %s\n",yytext);}
 {IDENTIFIER} {printf("IDENTIFIER %s\n", yytext);}
-{COMMENT}
-. {printf("Not reconized %s\n",yytext);}
+{COMMENT} {++lineNum;}
+. {printf("ERROR at line %d in %s\n",lineNum,yytext);}
 %%
 
 main(int argc, char *argv[]){
