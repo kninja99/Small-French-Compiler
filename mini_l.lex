@@ -1,5 +1,6 @@
 %{
 #include <stdio.h>
+#include "y.tab.h"
 int lineNum = 1;
 int charPos = 0;
 %}
@@ -74,9 +75,3 @@ NEWLINE \n
 {INVALID} {printf("ERROR at line %d pos %d in %s\n",lineNum,charPos,yytext);}
 . {printf("ERROR at line %d pos %d in %s\n",lineNum,charPos,yytext);}
 %%
-
-main(int argc, char *argv[]){
-    FILE *fp = fopen(argv[1],"r");
-    yyin = fp;
-    yylex();
-}
