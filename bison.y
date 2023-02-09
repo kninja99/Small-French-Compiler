@@ -1,10 +1,13 @@
 %{
 #include <stdio.h>
 extern FILE* yyin;
+extern int lineNum;
+extern int charPos;
+int yyerror(char *);
 %}
 
 %start prog_start
-%token EMP
+%token NUMBER STARTBRACKET CLOSEBRACKET STARTPAREN CLOSEPAREN INTEGER ADD SUBTRACT DIVIDE MULTIPLICATION ASSIGNMENT LESSTHAN GREATERTHAN EQUAL NOTEQUAL LESSTHANEQUAL GREATERTHANEQUAL OUTPUT INPUT DO WHILE RETURN FUNCTION ELSE IF ENDLINE TRUE FALSE IDENTIFIER
 
 %%
 prog_start: %empty /* epsilon */ {printf("prog_start-> epsilon");}
