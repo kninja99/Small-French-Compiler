@@ -10,5 +10,5 @@ fonction main() {
     ent fac;
     contribution >> n;
     fac -> factorial(n);
-    imprimer(fac);
+    sortir(fac);
 }

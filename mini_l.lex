@@ -5,7 +5,6 @@ int lineNum = 1;
 int charPos = 0;
 %}
 
-PRINT [imprimer]
 NUMBER [0-9]+
 STARTBRACKET [{]
 CLOSEBRACKET [}]
@@ -40,8 +39,7 @@ IDENTIFIER [a-zA-Z]+[a-zA-Z0-9]*
 INVALID [0-9]+[a-zA-Z0-9]+
 NEWLINE \n
 
-%%\
-{PRINT} {charPos+=yyleng; return PRINT;}
+%%
 {NUMBER} {charPos+=yyleng; return NUMBER;}
 {STARTBRACKET} {charPos+=yyleng; return STARTBRACKET;}
 {CLOSEBRACKET} {charPos+=yyleng; return CLOSEBRACKET;}
