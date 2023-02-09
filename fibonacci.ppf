@@ -1,0 +1,12 @@
+ fonction fibonacci(ent k){
+    si(k <= 1) {revenir 1;}
+    revenir fibonacci(k-1) + fibonacci(k-2);
+}
+
+fonction main(){
+    ent n;
+    ent fib_n;
+    contribution n;
+    fib_n -> fibonacci(n);
+    sortir fib_n;
+}
