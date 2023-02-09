@@ -40,36 +40,36 @@ INVALID [0-9]+[a-zA-Z0-9]+
 NEWLINE \n
 
 %%\
-{NUMBER} {printf("NUMBER %s\n", yytext); charPos+=yyleng;}
-{STARTBRACKET} {printf("STARTBRACKET %s\n", yytext); charPos+=yyleng;}
-{CLOSEBRACKET} {printf("CLOSEBRACKET %s\n", yytext); charPos+=yyleng;}
-{STARTPAREN} {printf("STARTPAREN %s\n", yytext); charPos+=yyleng;}
-{CLOSEPAREN} {printf("CLOSEPAREN %s\n", yytext); charPos+=yyleng;}
-{INTEGER}  {printf("INTEGER %s \n", yytext); charPos+=yyleng;}
-{ADD} {printf("ADD %s \n", yytext); charPos+=yyleng;}
-{SUBTRACT} {printf("SUBTRACT %s \n", yytext); charPos+=yyleng;}
-{DIVIDE} {printf("DIVIDE %s \n", yytext); charPos+=yyleng;} 
-{MULTIPLICATION} {printf("MULTIPLICATION %s \n", yytext); charPos+=yyleng;} 
-{ASSIGNMENT} {printf("ASSIGNMENT %s \n", yytext); charPos+=yyleng;}
-{LESSTHAN}   {printf("LESSTHAN %s \n", yytext); charPos+=yyleng;}
-{GREATERTHAN} {printf("GREATERTHAN %s \n", yytext); charPos+=yyleng;}
-{EQUAL}       {printf("EQUAL %s \n", yytext); charPos+=yyleng;}
-{NOTEQUAL}    {printf("NOTEQUAL %s \n", yytext); charPos+=yyleng;}
-{LESSTHANEQUAL} {printf("LESSTHANEQUAL %s \n", yytext); charPos+=yyleng;}
-{GREATERTHANEQUAL} {printf("GREATERTHANEQUAL %s \n", yytext); charPos+=yyleng;}
-{OUTPUT} {printf("OUTPUT %s \n", yytext); charPos+=yyleng;}
-{INPUT} {printf("INPUT %s \n", yytext); charPos+=yyleng;}
-{DO} {printf("DO %s \n", yytext); charPos+=yyleng;}
-{WHILE} {printf("WHILE %s \n", yytext); charPos+=yyleng;}
-{RETURN} {printf("RETURN %s \n", yytext); charPos+=yyleng;}
-{FUNCTION} {printf("FUNCTION %s \n", yytext); charPos+=yyleng;}
-{ELSE} {printf("ELSE KEYWORD\n" ); charPos+=yyleng;}
-{IF} {printf("IF KEYWORD\n"); charPos+=yyleng;}
-{ENDLINE} {printf("ENDLINE %s\n",yytext); charPos+=yyleng;}
+{NUMBER} {charPos+=yyleng; return NUMBER;}
+{STARTBRACKET} {charPos+=yyleng; return STARTBRACKET;}
+{CLOSEBRACKET} {charPos+=yyleng; return CLOSEBRACKET;}
+{STARTPAREN} {charPos+=yyleng; return STARTPAREN;}
+{CLOSEPAREN} {charPos+=yyleng; return CLOSEPAREN;}
+{INTEGER}  {charPos+=yyleng; return INTEGER;}
+{ADD} {charPos+=yyleng; return ADD;}
+{SUBTRACT} {charPos+=yyleng; return SUBTRACT;}
+{DIVIDE} {printf(charPos+=yyleng; return DIVIDE;} 
+{MULTIPLICATION} {charPos+=yyleng; return MULTIPLICATION;} 
+{ASSIGNMENT} {charPos+=yyleng; return ASSIGNMENT;}
+{LESSTHAN}   {charPos+=yyleng; return LESSTHAN;}
+{GREATERTHAN} {charPos+=yyleng; return GREATERTHAN}
+{EQUAL}       {charPos+=yyleng; return EQUAL;}
+{NOTEQUAL}    {charPos+=yyleng; return NOTEQUAL;}
+{LESSTHANEQUAL} {charPos+=yyleng; return LESSTHANEQUAL;}
+{GREATERTHANEQUAL} {charPos+=yyleng; return GREATERTHANEQUAL;}
+{OUTPUT} {charPos+=yyleng; return OUTPUT;}
+{INPUT} {charPos+=yyleng; return INPUT;}
+{DO} {charPos+=yyleng; return DO;}
+{WHILE} {charPos+=yyleng; return WHILE;}
+{RETURN} {charPos+=yyleng; return RETURN;}
+{FUNCTION} {charPos+=yyleng; return FUNCTION;}
+{ELSE} {charPos+=yyleng; return ELSE;}
+{IF} {charPos+=yyleng; return IF;}
+{ENDLINE} {charPos+=yyleng; return ENDLINE;}
 {SPACE} {}
-{TRUE} {printf("TRUE TOKEN %s\n",yytext); charPos+=yyleng;}
-{FALSE} {printf("FALSE TOKEN %s\n",yytext); charPos+=yyleng;}
-{IDENTIFIER} {printf("IDENTIFIER %s\n", yytext); charPos+=yyleng;}
+{TRUE} {charPos+=yyleng; return TRUE;}
+{FALSE} {charPos+=yyleng; return FALSE;}
+{IDENTIFIER} {charPos+=yyleng; return IDENTIFIER;}
 {COMMENT} {}
 {NEWLINE} {++lineNum; charPos = 0;}
 {INVALID} {printf("ERROR at line %d pos %d in %s\n",lineNum,charPos,yytext);}
