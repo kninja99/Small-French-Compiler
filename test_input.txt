@@ -1,1 +1,4 @@
-fonction factorial(ent i , ent j)
+fonction factorial(ent i , ent j) {
+    ent k;
+    ent l;
+}
