@@ -39,7 +39,7 @@ IDENTIFIER [a-zA-Z]+[a-zA-Z0-9]*
 INVALID [0-9]+[a-zA-Z0-9]+
 NEWLINE \n
 
-%%\
+%%
 {NUMBER} {charPos+=yyleng; return NUMBER;}
 {STARTBRACKET} {charPos+=yyleng; return STARTBRACKET;}
 {CLOSEBRACKET} {charPos+=yyleng; return CLOSEBRACKET;}
