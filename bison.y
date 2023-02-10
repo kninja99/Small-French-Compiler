@@ -10,7 +10,7 @@ extern int charPos;
 
 %%
 prog_start: %empty /* epsilon */ {printf("prog_start-> epsilon");}
-    | functions {printf("prog_start-> FUNCTIONS\n");}
+    | functions {printf("prog_start-> functions\n");}
 
 functions: function {printf("functions -> function\n");}
     | function functions {printf("functions -> function functions");}
