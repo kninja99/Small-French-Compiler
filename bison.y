@@ -11,24 +11,37 @@ extern int charPos;
 %%
 prog_start: %empty /* epsilon */ {printf("prog_start-> epsilon");}
     | functions {printf("prog_start-> functions\n");}
+    ;
 
 functions: function {printf("functions -> function\n");}
     | function functions {printf("functions -> function functions");}
+    ;
 
-function: FUNCTION IDENTIFIER STARTPAREN CLOSEPAREN STARTBRACKET statements CLOSEBRACKET {printf("function -> FUNCTION IDENTIFIER STARTPAREN CLOSEPAREN STARTBRACKET statement CLOSEBRACKET\n");}
-    | FUNCTION IDENTIFIER STARTPAREN args CLOSEPAREN STARTBRACKET statements CLOSEBRACKET {printf("function -> FUNCTION IDENTIFIER STARTPAREN args CLOSEPAREN STARTBRACKET statement CLOSEBRACKET\n");}
+function: FUNCTION IDENTIFIER STARTPAREN args CLOSEPAREN STARTBRACKET statements CLOSEBRACKET {printf("function -> FUNCTION IDENTIFIER STARTPAREN args CLOSEPAREN STARTBRACKET statement CLOSEBRACKET\n");}
+    ;
 
 args: arg {printf("args -> arg\n");}
     | arg COMMA args {printf("args -> arg COMMA args\n");}
+    | %empty /* epsilon */ {printf("args -> epsilon\n");}
+    ;
 
 arg: INTEGER IDENTIFIER {printf("arg -> INTEGER IDENTIFIER\n");}
+    | IDENTIFIER {printf("arg -> IDENTIFIER\n");}
+    ;
 
 statements: %empty /* epsilon */ {printf("statements -> epsilon\n");}
     | statement ENDLINE statements {printf("statements -> statement ENDLINE statements\n");}
+    ;
 
 statement: declaration {printf("statement -> declaration\n");}
+    | function_call {printf("statement -> function_call\n");}
+    ;
 
 declaration: INTEGER IDENTIFIER {printf("declaration -> INTEGER IDENTIFIER\n");}
+    ;
+
+function_call: IDENTIFIER STARTPAREN args CLOSEPAREN {printf("function_call -> IDENTIFIER STARTPAREN args CLOSEPAREN\n");}
+    ;
 %%
 main(int argc, char *argv[]){
     FILE *fp = fopen(argv[1],"r");

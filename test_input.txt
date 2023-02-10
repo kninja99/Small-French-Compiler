@@ -1,4 +1,5 @@
 fonction factorial(ent i , ent j) {
     ent k;
     ent l;
+    factorial(k,l);
 }
