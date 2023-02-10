@@ -48,11 +48,11 @@ NEWLINE \n
 {INTEGER}  {charPos+=yyleng; return INTEGER;}
 {ADD} {charPos+=yyleng; return ADD;}
 {SUBTRACT} {charPos+=yyleng; return SUBTRACT;}
-{DIVIDE} {printf(charPos+=yyleng; return DIVIDE;} 
+{DIVIDE} {charPos+=yyleng; return DIVIDE;} 
 {MULTIPLICATION} {charPos+=yyleng; return MULTIPLICATION;} 
 {ASSIGNMENT} {charPos+=yyleng; return ASSIGNMENT;}
 {LESSTHAN}   {charPos+=yyleng; return LESSTHAN;}
-{GREATERTHAN} {charPos+=yyleng; return GREATERTHAN}
+{GREATERTHAN} {charPos+=yyleng; return GREATERTHAN;}
 {EQUAL}       {charPos+=yyleng; return EQUAL;}
 {NOTEQUAL}    {charPos+=yyleng; return NOTEQUAL;}
 {LESSTHANEQUAL} {charPos+=yyleng; return LESSTHANEQUAL;}

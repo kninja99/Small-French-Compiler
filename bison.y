@@ -3,7 +3,6 @@
 extern FILE* yyin;
 extern int lineNum;
 extern int charPos;
-int yyerror(char *);
 %}
 
 %start prog_start
