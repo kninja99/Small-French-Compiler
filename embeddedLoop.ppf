@@ -1,0 +1,14 @@
+fonction main(){
+    ent num1 -> 0;
+    ent num2 -> 0;
+    tandis(num1 < 3){
+        sortir << num1;
+        num2 = 0;
+        tandis(num2 < 3){
+            sortir << num2;
+            num2 -> num2 + 1;
+        }
+        num1 -> num1 + 1;
+    }
+    revenir 0;
+}
