@@ -1,1 +1,1 @@
-fonction factorial
+fonction factorial(ent i , ent j)

@@ -38,8 +38,10 @@ FALSE "false"
 IDENTIFIER [a-zA-Z]+[a-zA-Z0-9]*
 INVALID [0-9]+[a-zA-Z0-9]+
 NEWLINE \n
+COMMA ,
 
 %%
+{COMMA} {charPos+=yyleng; return COMMA;}
 {NUMBER} {charPos+=yyleng; return NUMBER;}
 {STARTBRACKET} {charPos+=yyleng; return STARTBRACKET;}
 {CLOSEBRACKET} {charPos+=yyleng; return CLOSEBRACKET;}
