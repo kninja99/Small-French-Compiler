@@ -10,6 +10,12 @@ extern int charPos;
 
 %%
 prog_start: %empty /* epsilon */ {printf("prog_start-> epsilon");}
+    | functions {printf("prog_start-> FUNCTIONS\n");}
+
+functions: function {printf("functions -> function\n");}
+    | function functions {printf("functions -> function functions");}
+
+function: FUNCTION {printf("functions -> FUNCTION\n");}
 %%
 main(int argc, char *argv[]){
     FILE *fp = fopen(argv[1],"r");
