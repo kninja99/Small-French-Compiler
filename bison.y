@@ -38,6 +38,7 @@ statement: declaration {printf("statement -> declaration\n");}
     | assignment {printf("statement -> assignment\n");}
     | expression {printf("statement -> expression\n");}
     | io {printf("statement -> io\n");}
+    | conditionals {printf("statement -> conditionals\n");}
     ;
 
 declaration: INTEGER IDENTIFIER {printf("declaration -> INTEGER IDENTIFIER\n");}
@@ -76,7 +77,28 @@ factor: STARTPAREN expression CLOSEPAREN {printf("factor -> STARTPAREN expressio
     | function_call {printf("factor -> function_call\n");}
     | IDENTIFIER {printf("factor -> IDENTIFIER\n");}
     ;
-%%
+
+conditionals: IF STARTPAREN boolean CLOSEPAREN STARTBRACKET statements CLOSEBRACKET condition {printf("conditionals -> IF STARTPAREN boolean CLOSEPAREN STARTBRACKET statements CLOSEBRACKET condition\n");}
+    ;
+
+condition: %empty /* epsilon */ {printf("condition -> epsilon\n");}
+    | ELSE STARTBRACKET statements CLOSEBRACKET {printf("condition -> ELSE STARTBRACKET statements CLOSEBRACKET\n");}
+    ;
+
+boolean: TRUE  {printf("boolean -> TRUE\n");}
+    | FALSE {printf("boolean -> FALSE\n");}
+    | expression boolop expression {printf("boolean -> expression boolop expression\n");}
+    | boolean boolop boolean {printf("boolean -> boolean boolop boolean\n");}
+    ;
+
+boolop: EQUAL {printf("boolop-> EQUAL\n");}
+    | LESSTHAN  {printf("boolop-> LESSTHAN\n");}
+    | LESSTHANEQUAL {printf("boolop-> LESSTHANEQUAL\n");}
+    | GREATERTHAN   {printf("boolop-> GREATERTHAN\n");}
+    | GREATERTHANEQUAL  {printf("boolop-> GREATERTHANEQUAL\n");}
+    | NOTEQUAL  {printf("boolop-> NOTEQUAL\n");}
+    ;
+ %%
 main(int argc, char *argv[]){
     FILE *fp = fopen(argv[1],"r");
     yyin = fp;
