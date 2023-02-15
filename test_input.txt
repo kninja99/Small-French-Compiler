@@ -1,5 +1,9 @@
 fonction factorial(ent i , ent j) {
-    ent k;
-    ent l;
-    factorial(k,l);
+    # ent k;
+    # ent l;
+    # l -> 10;
+    # ent w -> test(k,l);
+    # l ->  test(k,l);
+    # ent w -> 10;
+    # factorial(k,l);
 }

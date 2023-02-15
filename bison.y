@@ -35,6 +35,7 @@ statements: %empty /* epsilon */ {printf("statements -> epsilon\n");}
 
 statement: declaration {printf("statement -> declaration\n");}
     | function_call {printf("statement -> function_call\n");}
+    | assignment {printf("statement -> assignment\n");}
     ;
 
 declaration: INTEGER IDENTIFIER {printf("declaration -> INTEGER IDENTIFIER\n");}
@@ -42,6 +43,11 @@ declaration: INTEGER IDENTIFIER {printf("declaration -> INTEGER IDENTIFIER\n");}
 
 function_call: IDENTIFIER STARTPAREN args CLOSEPAREN {printf("function_call -> IDENTIFIER STARTPAREN args CLOSEPAREN\n");}
     ;
+
+assignment: IDENTIFIER ASSIGNMENT NUMBER {printf("assignment -> IDENTIFIER ASSIGNMENT NUMBER\n");}
+    | declaration ASSIGNMENT NUMBER {printf("assignment -> declaration ASSIGNMENT NUMBER\n");}
+    | IDENTIFIER ASSIGNMENT function_call {printf("assignment -> IDENTIFIER ASSIGNMENT function_call\n");}
+    | declaration ASSIGNMENT function_call {printf("assignment -> declaration ASSIGNMENT function_call\n");}
 %%
 main(int argc, char *argv[]){
     FILE *fp = fopen(argv[1],"r");
