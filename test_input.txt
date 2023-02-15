@@ -6,6 +6,11 @@ fonction factorial(ent i , ent j) {
     # l ->  test(k,l);
     # ent w -> 10;
     # factorial(k,l);
-    contribution >> n;
-    sortir << num2;
+    # contribution >> n;
+    # sortir << num2;
+    5 + 2;
+    i + 7;
+    10 * factorial(i,j);
+    12 / 6;
+    (10 - 5);
 }

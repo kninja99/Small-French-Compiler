@@ -36,6 +36,7 @@ statements: %empty /* epsilon */ {printf("statements -> epsilon\n");}
 statement: declaration {printf("statement -> declaration\n");}
     | function_call {printf("statement -> function_call\n");}
     | assignment {printf("statement -> assignment\n");}
+    | expression {printf("statement -> expression\n");}
     | io {printf("statement -> io\n");}
     ;
 
@@ -53,6 +54,27 @@ assignment: IDENTIFIER ASSIGNMENT NUMBER {printf("assignment -> IDENTIFIER ASSIG
 
 io: OUTPUT IDENTIFIER {printf("io -> OUTPUT IDENTIFIER\n");}
     | INPUT IDENTIFIER {printf("io -> INPUT IDENTIFIER\n");}
+    ;
+
+expression: expression addop term {printf("exp ->exp addop term\n");}
+    | term {printf("exp ->term\n");}
+    ;
+
+addop: ADD {printf("addop ->ADD\n");}
+    | SUBTRACT {printf("addop ->SUBTRACT\n");}
+    ;
+
+term: term multop factor {printf("term -> term multop factor\n");}
+    | factor {printf("term -> factor\n");}
+    ;
+
+multop: MULTIPLICATION {printf("multop -> MULTIPLICATION\n");}
+    | DIVIDE {printf("multop -> DIVIDE\n");}
+
+factor: STARTPAREN expression CLOSEPAREN {printf("factor -> STARTPAREN expression CLOSEPAREN\n");} 
+    | NUMBER {printf("factor -> NUMBER\n");}
+    | function_call {printf("factor -> function_call\n");}
+    | IDENTIFIER {printf("factor -> IDENTIFIER\n");}
     ;
 %%
 main(int argc, char *argv[]){
