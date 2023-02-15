@@ -6,7 +6,7 @@
 fonction main(){
     ent n;
     ent fib_n;
-    contribution n;
+    contribution >> n;
     fib_n -> fibonacci(n);
     sortir fib_n;
 }
