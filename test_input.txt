@@ -28,4 +28,7 @@ fonction factorial(ent i , ent j) {
     #        # do something
     #    }
     #}
+    faire { 
+        ent i; 
+    } tandis(true);
 }

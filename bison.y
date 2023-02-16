@@ -33,6 +33,7 @@ statements: %empty /* epsilon */ {printf("statements -> epsilon\n");}
     | statement ENDLINE statements {printf("statements -> statement ENDLINE statements\n");}
     | conditionals statements {printf("statements -> conditionals\n");}
     | whileloop {printf("statements -> whileloop\n");}
+    | dowhile {printf("statements -> dowhile\n");}
     ;
 
 statement: declaration {printf("statement -> declaration\n");}
@@ -100,6 +101,8 @@ boolop: EQUAL {printf("boolop-> EQUAL\n");}
     ;
 
 whileloop: WHILE STARTPAREN boolean CLOSEPAREN STARTBRACKET statements CLOSEBRACKET {printf("whileloop -> WHILE STARTPAREN boolean CLOSEPAREN STARTBRACKET statements CLOSEBRACKET\n");}
+
+dowhile: DO STARTBRACKET statements CLOSEBRACKET WHILE STARTPAREN boolean CLOSEPAREN ENDLINE {printf("dowhile -> DO STARTBRACKET statements CLOSEBRACKET WHILE STARTPAREN boolean CLOSEPAREN ENDLINE\n");}
     ;
  %%
 main(int argc, char *argv[]){
