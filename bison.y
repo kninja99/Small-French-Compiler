@@ -26,8 +26,6 @@ args: arg {printf("args -> arg\n");}
     ;
 
 arg: INTEGER IDENTIFIER {printf("arg -> INTEGER IDENTIFIER\n");}
-    | IDENTIFIER {printf("arg -> IDENTIFIER\n");}
-    | NUMBER {printf("arg -> NUMBER\n");}
     | expression {printf("arg -> expression\n");}
     ;
 
