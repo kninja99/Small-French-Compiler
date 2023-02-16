@@ -47,8 +47,8 @@ declaration: INTEGER IDENTIFIER {printf("declaration -> INTEGER IDENTIFIER\n");}
 function_call: IDENTIFIER STARTPAREN args CLOSEPAREN {printf("function_call -> IDENTIFIER STARTPAREN args CLOSEPAREN\n");}
     ;
 
-assignment: IDENTIFIER ASSIGNMENT NUMBER {printf("assignment -> IDENTIFIER ASSIGNMENT NUMBER\n");}
-    | declaration ASSIGNMENT NUMBER {printf("assignment -> declaration ASSIGNMENT NUMBER\n");}
+assignment: IDENTIFIER ASSIGNMENT expression {printf("assignment -> IDENTIFIER ASSIGNMENT expersion\n");}
+    | declaration ASSIGNMENT expression {printf("assignment -> declaration ASSIGNMENT expression\n");}
     | IDENTIFIER ASSIGNMENT function_call {printf("assignment -> IDENTIFIER ASSIGNMENT function_call\n");}
     | declaration ASSIGNMENT function_call {printf("assignment -> declaration ASSIGNMENT function_call\n");}
     ;
