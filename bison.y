@@ -41,7 +41,7 @@ statement: declaration {printf("statement -> declaration\n");}
     | assignment {printf("statement -> assignment\n");}
     | expression {printf("statement -> expression\n");}
     | io {printf("statement -> io\n");}
-    
+    | return {printf("statement -> return\n");}
     ;
 
 declaration: INTEGER IDENTIFIER {printf("declaration -> INTEGER IDENTIFIER\n");}
@@ -104,6 +104,9 @@ whileloop: WHILE STARTPAREN boolean CLOSEPAREN STARTBRACKET statements CLOSEBRAC
 
 dowhile: DO STARTBRACKET statements CLOSEBRACKET WHILE STARTPAREN boolean CLOSEPAREN ENDLINE {printf("dowhile -> DO STARTBRACKET statements CLOSEBRACKET WHILE STARTPAREN boolean CLOSEPAREN ENDLINE\n");}
     ;
+
+return: RETURN expression {printf("return -> RETURN expression\n");}
+    | RETURN function_call  {printf("return -> RETURN function_call\n");}    
  %%
 main(int argc, char *argv[]){
     FILE *fp = fopen(argv[1],"r");
