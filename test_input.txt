@@ -1,35 +1,30 @@
 fonction factorial(ent i , ent j) {
-   # ent k;
-    #ent l;
-    #l -> 10;
-    #ent w -> test(k,l);
-    #l ->  test(k,l);
-    #ent w -> 10;
-    #factorial(k,l);
-    #contribution >> n;
-    #sortir << num2;
-    #5 + 2;
-    ##i + 7;
-    #10;
-    #12 / 6;
-    #(10 - 5);
-    #si(true) {
-    #
-    #}
-    #autre {
-    #
-    #}
-    #tandis(10 == 10) {
-    #    ent i -> 10;
-    #    si(true) {
-    #        # do something
-    #    }
-    #    autre {
-    #        # do something
-    #    }
-    #}
-    #faire { 
-    #    ent i; 
-    #} tandis(true);
-    revenir functioncall(i);
+    # ent i;
+    # ent i -> functioncall(i,j);
+    # functioncall(i,j);
+    # ent k -> 5;
+    k -> 5 * 2 + 1;
+    si(true) {
+        # do some code 
+    }
+    autre {
+        # do some code
+    }
+
+    tandis(10 < 5) {
+        # do some code
+        si(true) {
+            # do some code 
+        }
+        tandis(true){
+            # do some code
+        }
+    }
+
+    faire {
+        # do some code
+    } tandis(10 < 5);
+
+    functioncall(2);
+    revenir functioncall(2) + functioncall(i);
 }

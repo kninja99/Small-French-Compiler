@@ -27,17 +27,17 @@ args: arg {printf("args -> arg\n");}
 
 arg: INTEGER IDENTIFIER {printf("arg -> INTEGER IDENTIFIER\n");}
     | IDENTIFIER {printf("arg -> IDENTIFIER\n");}
+    | NUMBER {printf("arg -> NUMBER\n");}
     ;
 
 statements: %empty /* epsilon */ {printf("statements -> epsilon\n");}
     | statement ENDLINE statements {printf("statements -> statement ENDLINE statements\n");}
     | conditionals statements {printf("statements -> conditionals\n");}
-    | whileloop {printf("statements -> whileloop\n");}
-    | dowhile {printf("statements -> dowhile\n");}
+    | whileloop statements {printf("statements -> whileloop\n");}
+    | dowhile statements {printf("statements -> dowhile\n");}
     ;
 
 statement: declaration {printf("statement -> declaration\n");}
-    | function_call {printf("statement -> function_call\n");}
     | assignment {printf("statement -> assignment\n");}
     | expression {printf("statement -> expression\n");}
     | io {printf("statement -> io\n");}
@@ -52,8 +52,6 @@ function_call: IDENTIFIER STARTPAREN args CLOSEPAREN {printf("function_call -> I
 
 assignment: IDENTIFIER ASSIGNMENT expression {printf("assignment -> IDENTIFIER ASSIGNMENT expersion\n");}
     | declaration ASSIGNMENT expression {printf("assignment -> declaration ASSIGNMENT expression\n");}
-    | IDENTIFIER ASSIGNMENT function_call {printf("assignment -> IDENTIFIER ASSIGNMENT function_call\n");}
-    | declaration ASSIGNMENT function_call {printf("assignment -> declaration ASSIGNMENT function_call\n");}
     ;
 
 io: OUTPUT IDENTIFIER {printf("io -> OUTPUT IDENTIFIER\n");}
@@ -78,6 +76,7 @@ multop: MULTIPLICATION {printf("multop -> MULTIPLICATION\n");}
 factor: STARTPAREN expression CLOSEPAREN {printf("factor -> STARTPAREN expression CLOSEPAREN\n");} 
     | NUMBER {printf("factor -> NUMBER\n");}
     | IDENTIFIER {printf("factor -> IDENTIFIER\n");}
+    | function_call {printf("factor -> function_call\n");}
     ;
 
 conditionals: IF STARTPAREN boolean CLOSEPAREN STARTBRACKET statements CLOSEBRACKET condition {printf("conditionals -> IF STARTPAREN boolean CLOSEPAREN STARTBRACKET statements CLOSEBRACKET condition\n");}
@@ -105,8 +104,8 @@ whileloop: WHILE STARTPAREN boolean CLOSEPAREN STARTBRACKET statements CLOSEBRAC
 dowhile: DO STARTBRACKET statements CLOSEBRACKET WHILE STARTPAREN boolean CLOSEPAREN ENDLINE {printf("dowhile -> DO STARTBRACKET statements CLOSEBRACKET WHILE STARTPAREN boolean CLOSEPAREN ENDLINE\n");}
     ;
 
-return: RETURN expression {printf("return -> RETURN expression\n");}
-    | RETURN function_call  {printf("return -> RETURN function_call\n");}    
+return: RETURN expression {printf("return -> RETURN expression\n");}  
+    ; 
  %%
 main(int argc, char *argv[]){
     FILE *fp = fopen(argv[1],"r");
