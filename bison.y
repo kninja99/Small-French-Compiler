@@ -9,7 +9,7 @@ extern int charPos;
 %token NUMBER STARTBRACKET CLOSEBRACKET STARTPAREN CLOSEPAREN INTEGER ADD SUBTRACT DIVIDE MULTIPLICATION ASSIGNMENT LESSTHAN GREATERTHAN EQUAL NOTEQUAL LESSTHANEQUAL GREATERTHANEQUAL OUTPUT INPUT DO WHILE RETURN FUNCTION ELSE IF ENDLINE TRUE FALSE IDENTIFIER COMMA
 
 %%
-prog_start: %empty /* epsilon */ {printf("prog_start-> epsilon");}
+prog_start: %empty /* epsilon */ {printf("prog_start-> epsilon \n");}
     | functions {printf("prog_start-> functions\n");}
     ;
 
@@ -31,6 +31,8 @@ arg: INTEGER IDENTIFIER {printf("arg -> INTEGER IDENTIFIER\n");}
 
 statements: %empty /* epsilon */ {printf("statements -> epsilon\n");}
     | statement ENDLINE statements {printf("statements -> statement ENDLINE statements\n");}
+    | conditionals statements {printf("statements -> conditionals\n");}
+    | whileloop {printf("statements -> whileloop\n");}
     ;
 
 statement: declaration {printf("statement -> declaration\n");}
@@ -38,7 +40,7 @@ statement: declaration {printf("statement -> declaration\n");}
     | assignment {printf("statement -> assignment\n");}
     | expression {printf("statement -> expression\n");}
     | io {printf("statement -> io\n");}
-    | conditionals {printf("statement -> conditionals\n");}
+    
     ;
 
 declaration: INTEGER IDENTIFIER {printf("declaration -> INTEGER IDENTIFIER\n");}
@@ -95,6 +97,9 @@ boolop: EQUAL {printf("boolop-> EQUAL\n");}
     | GREATERTHAN   {printf("boolop-> GREATERTHAN\n");}
     | GREATERTHANEQUAL  {printf("boolop-> GREATERTHANEQUAL\n");}
     | NOTEQUAL  {printf("boolop-> NOTEQUAL\n");}
+    ;
+
+whileloop: WHILE STARTPAREN boolean CLOSEPAREN STARTBRACKET statements CLOSEBRACKET {printf("whileloop -> WHILE STARTPAREN boolean CLOSEPAREN STARTBRACKET statements CLOSEBRACKET\n");}
     ;
  %%
 main(int argc, char *argv[]){
