@@ -3,7 +3,7 @@ fonction main(){
     ent num2 -> 0;
     tandis(num1 < 3){
         sortir << num1;
-        num2 = 0;
+        num2 -> 0;
         tandis(num2 < 3){
             sortir << num2;
             num2 -> num2 + 1;

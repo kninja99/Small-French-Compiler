@@ -14,7 +14,7 @@ prog_start: %empty /* epsilon */ {printf("prog_start-> epsilon \n");}
     ;
 
 functions: function {printf("functions -> function\n");}
-    | function functions {printf("functions -> function functions");}
+    | function functions {printf("functions -> function functions\n");}
     ;
 
 function: FUNCTION IDENTIFIER STARTPAREN args CLOSEPAREN STARTBRACKET statements CLOSEBRACKET {printf("function -> FUNCTION IDENTIFIER STARTPAREN args CLOSEPAREN STARTBRACKET statement CLOSEBRACKET\n");}
@@ -28,6 +28,7 @@ args: arg {printf("args -> arg\n");}
 arg: INTEGER IDENTIFIER {printf("arg -> INTEGER IDENTIFIER\n");}
     | IDENTIFIER {printf("arg -> IDENTIFIER\n");}
     | NUMBER {printf("arg -> NUMBER\n");}
+    | expression {printf("arg -> expression\n");}
     ;
 
 statements: %empty /* epsilon */ {printf("statements -> epsilon\n");}
