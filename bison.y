@@ -111,4 +111,6 @@ main(int argc, char *argv[]){
     yyin = fp;
     yyparse();
 }
-int yyerror(){}
+int yyerror(char *error) {
+    printf("Error at line %d, position %d: %s", lineNum, charPos, error);
+}

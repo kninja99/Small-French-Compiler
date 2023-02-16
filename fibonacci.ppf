@@ -1,7 +1,7 @@
  fonction fibonacci(ent k){
     si(k <= 1) {
         revenir 1;
-    }
+    
     revenir fibonacci(k-1) + fibonacci(k-2);
 }
 
