@@ -1,0 +1,14 @@
+fonction factorial(ent k) {
+    si(k <= 1) {
+        revenir 1;
+    }
+    revenir k * factorial(k-1);
+}
+
+fonction main() {
+    ent n;
+    ent fac;
+    contribution >> n;
+    fac -> factorial(n);
+    sortir << fac;
+}

@@ -1,20 +1,30 @@
-ent
-#this is a comment
-7i2
-fonction factorial(ent x){
-    ent result -> 1;
-    ent i -> 1;
+fonction factorial(ent i , ent j) {
+    # ent i;
+    # ent i -> functioncall(i,j);
+    # functioncall(i,j);
+    # ent k -> 5;
+    k -> 5 * 2 + 1;
+    si(true) {
+        # do some code 
+    }
+    autre {
+        # do some code
+    }
+
+    tandis(10 < 5) {
+        # do some code
+        si(true) {
+            # do some code 
+        }
+        tandis(true){
+            # do some code
+        }
+    }
+
     faire {
-        result -> result * i;
-        i -> i + 1;
-        i-> i-1;
-        i-> i/1;
-    } tandis (i <= n);
-    revenir result;
-}
-96invalid
-fonction main () {
-    ent num1 -> 7;
-    sortir << factorial(num1);
-    revenir 0;
+        # do some code
+    } tandis(10 < 5);
+
+    functioncall(2);
+    revenir functioncall(2) + functioncall(i);
 }
