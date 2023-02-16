@@ -74,7 +74,6 @@ multop: MULTIPLICATION {printf("multop -> MULTIPLICATION\n");}
 
 factor: STARTPAREN expression CLOSEPAREN {printf("factor -> STARTPAREN expression CLOSEPAREN\n");} 
     | NUMBER {printf("factor -> NUMBER\n");}
-    | function_call {printf("factor -> function_call\n");}
     | IDENTIFIER {printf("factor -> IDENTIFIER\n");}
     ;
 
@@ -88,7 +87,6 @@ condition: %empty /* epsilon */ {printf("condition -> epsilon\n");}
 boolean: TRUE  {printf("boolean -> TRUE\n");}
     | FALSE {printf("boolean -> FALSE\n");}
     | expression boolop expression {printf("boolean -> expression boolop expression\n");}
-    | boolean boolop boolean {printf("boolean -> boolean boolop boolean\n");}
     ;
 
 boolop: EQUAL {printf("boolop-> EQUAL\n");}
