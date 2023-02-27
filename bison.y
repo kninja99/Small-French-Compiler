@@ -6,7 +6,7 @@ extern int charPos;
 %}
 
 %start prog_start
-%token NUMBER STARTBRACKET CLOSEBRACKET STARTPAREN CLOSEPAREN INTEGER ADD SUBTRACT DIVIDE MULTIPLICATION ASSIGNMENT LESSTHAN GREATERTHAN EQUAL NOTEQUAL LESSTHANEQUAL GREATERTHANEQUAL OUTPUT INPUT DO WHILE RETURN FUNCTION ELSE IF ENDLINE TRUE FALSE IDENTIFIER COMMA
+%token NUMBER STARTBRACKET CLOSEBRACKET STARTPAREN CLOSEPAREN INTEGER ADD SUBTRACT DIVIDE MULTIPLICATION ASSIGNMENT LESSTHAN GREATERTHAN EQUAL NOTEQUAL LESSTHANEQUAL GREATERTHANEQUAL OUTPUT INPUT DO WHILE RETURN FUNCTION ELSE IF ENDLINE TRUE FALSE IDENTIFIER COMMA ARRAY STARTBRACE ENDBRACE
 
 %%
 prog_start: %empty /* epsilon */ {printf("prog_start-> epsilon \n");}
@@ -44,13 +44,15 @@ statement: declaration {printf("statement -> declaration\n");}
     ;
 
 declaration: INTEGER IDENTIFIER {printf("declaration -> INTEGER IDENTIFIER\n");}
+    | INTEGER ARRAY {printf("declaration -> INTEGER ARRAY\n");}
     ;
 
 function_call: IDENTIFIER STARTPAREN args CLOSEPAREN {printf("function_call -> IDENTIFIER STARTPAREN args CLOSEPAREN\n");}
     ;
 
-assignment: IDENTIFIER ASSIGNMENT expression {printf("assignment -> IDENTIFIER ASSIGNMENT expersion\n");}
+assignment: IDENTIFIER ASSIGNMENT expression {printf("assignment -> IDENTIFIER ASSIGNMENT expression\n");}
     | declaration ASSIGNMENT expression {printf("assignment -> declaration ASSIGNMENT expression\n");}
+    | ARRAY ASSIGNMENT expression {printf("assignment -> ARRAY ASSIGNMENT expression\n");}
     ;
 
 io: OUTPUT IDENTIFIER {printf("io -> OUTPUT IDENTIFIER\n");}
@@ -59,6 +61,11 @@ io: OUTPUT IDENTIFIER {printf("io -> OUTPUT IDENTIFIER\n");}
 
 expression: expression addop term {printf("exp ->exp addop term\n");}
     | term {printf("exp ->term\n");}
+    | STARTBRACKET arraynumbers CLOSEBRACKET
+    ;
+arraynumbers: NUMBER {printf("arraynumbers -> NUMBER\n");}
+    | NUMBER COMMA arraynumbers {printf("arraynumbers -> arraynumber COMMA arraynumbers\n");}
+    | %empty /* epsilon */ {printf("arraynumbers -> epsilon\n");}
     ;
 
 addop: ADD {printf("addop ->ADD\n");}
@@ -76,6 +83,7 @@ factor: STARTPAREN expression CLOSEPAREN {printf("factor -> STARTPAREN expressio
     | NUMBER {printf("factor -> NUMBER\n");}
     | IDENTIFIER {printf("factor -> IDENTIFIER\n");}
     | function_call {printf("factor -> function_call\n");}
+    | ARRAY {printf("factor -> ARRAY\n");}
     ;
 
 conditionals: IF STARTPAREN boolean CLOSEPAREN STARTBRACKET statements CLOSEBRACKET condition {printf("conditionals -> IF STARTPAREN boolean CLOSEPAREN STARTBRACKET statements CLOSEBRACKET condition\n");}

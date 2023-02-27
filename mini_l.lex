@@ -39,8 +39,14 @@ IDENTIFIER [a-zA-Z]+[a-zA-Z0-9]*
 INVALID [0-9]+[a-zA-Z0-9]+
 NEWLINE \n
 COMMA ,
+STARTBRACE "["
+ENDBRACE "]"
+ARRAY [a-zA-Z]+[a-zA-Z0-9]*[[0-9]+]
 
 %%
+{ARRAY} {charPos+=yyleng; return ARRAY;}
+{STARTBRACE} {charPos+=yyleng; return STARTBRACE;}
+{ENDBRACE} {charPos+=yyleng; return ENDBRACE;}
 {COMMA} {charPos+=yyleng; return COMMA;}
 {NUMBER} {charPos+=yyleng; return NUMBER;}
 {STARTBRACKET} {charPos+=yyleng; return STARTBRACKET;}
