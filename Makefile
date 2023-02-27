@@ -6,7 +6,7 @@ bison:
 	flex mini_l.lex
 	bison -v -d --file-prefix=y bison.y
 	gcc -o parser lex.yy.c y.tab.c -lfl
-	./parser test_input.txt
+	./parser test.txt
 clean:
 	rm lex.yy.c
 	rm lexer
