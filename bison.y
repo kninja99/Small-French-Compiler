@@ -1,33 +1,37 @@
 %{
 #include <stdio.h>
 #include <string>
-#include <vector>
 #include <string.h>
 extern FILE* yyin;
 extern int lineNum;
 extern int charPos;
+
+extern int yylex(void);
+void yyerror(const char *msg);
 %}
 
 %start prog_start
-%token NUMBER STARTBRACKET CLOSEBRACKET STARTPAREN CLOSEPAREN INTEGER ADD SUBTRACT DIVIDE MULTIPLICATION ASSIGNMENT LESSTHAN GREATERTHAN EQUAL NOTEQUAL LESSTHANEQUAL GREATERTHANEQUAL OUTPUT INPUT DO WHILE RETURN FUNCTION ELSE IF ENDLINE TRUE FALSE IDENTIFIER COMMA ARRAY STARTBRACE ENDBRACE
-
-/* assigning type %type <type> node */ 
-
-%type <std::string> functions function
+%union {
+  char *op_val;
+}
+%token STARTBRACKET CLOSEBRACKET STARTPAREN CLOSEPAREN INTEGER ADD SUBTRACT DIVIDE MULTIPLICATION ASSIGNMENT LESSTHAN GREATERTHAN EQUAL NOTEQUAL LESSTHANEQUAL GREATERTHANEQUAL OUTPUT INPUT DO WHILE RETURN FUNCTION ELSE IF ENDLINE TRUE FALSE COMMA ARRAY STARTBRACE ENDBRACE
+%token <op_val> NUMBER 
+%token <op_val> IDENTIFIER
+%type <op_val> declaration
+%type <op_val> statements
+%type <op_val> statement
 %%
-prog_start: %empty /* epsilon */ 
-    | functions {printf("$1\n");}   
+prog_start: %empty /* epsilon */ {}
+    | functions {}
     ;
 
-functions: function {$$ = $1;}
-    | function functions {$$ = $1 + "\n" + $2;}
+functions: function {}
+    | function functions {}
     ;
-/* identifier need to be typed string so access */
-function: FUNCTION IDENTIFIER STARTPAREN args CLOSEPAREN STARTBRACKET statements CLOSEBRACKET 
-{
-    std::string temp= "func " +"\n";
-    temp += "endfunc";
-    $$ = temp;
+
+function: FUNCTION IDENTIFIER STARTPAREN args CLOSEPAREN STARTBRACKET statements CLOSEBRACKET {
+    printf("func %s\n",$2);
+    printf("endfunc %s\n",$2);
 }
     ;
 
@@ -40,8 +44,9 @@ arg: INTEGER IDENTIFIER {}
     | expression {}
     ;
 
-statements: %empty /* epsilon */ {}
-    | statement ENDLINE statements {}
+statements: %empty /* epsilon */ {$$ = "";}
+    | statement ENDLINE statements {
+    }
     | conditionals statements {}
     | whileloop statements {}
     | dowhile statements {}
@@ -54,7 +59,9 @@ statement: declaration {}
     | return {}
     ;
 
-declaration: INTEGER IDENTIFIER {}
+declaration: INTEGER IDENTIFIER {
+    $$ = $2;
+    }
     | INTEGER ARRAY {}
     ;
 
@@ -132,4 +139,9 @@ main(int argc, char *argv[]){
 }
 int yyerror(char *error) {
     printf("Error at line %d, position %d: %s", lineNum, charPos, error);
+}
+void yyerror(const char *msg)
+{
+   printf("Error at line %d, position %d: %s", lineNum, charPos, msg);
+   exit(1);
 }

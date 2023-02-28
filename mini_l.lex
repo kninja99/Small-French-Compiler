@@ -1,6 +1,6 @@
 %{
 #include <stdio.h>
-#include "y.tab.h"
+#include "bison.tab.h"
 int lineNum = 1;
 int charPos = 0;
 %}
@@ -48,7 +48,12 @@ ARRAY [a-zA-Z]+[a-zA-Z0-9]*[[0-9]+]
 {STARTBRACE} {charPos+=yyleng; return STARTBRACE;}
 {ENDBRACE} {charPos+=yyleng; return ENDBRACE;}
 {COMMA} {charPos+=yyleng; return COMMA;}
-{NUMBER} {charPos+=yyleng; return NUMBER;}
+{NUMBER} {
+    charPos+=yyleng;
+    char * token = new char[yyleng];
+    strcpy(token, yytext);
+    yylval.op_val = token;
+    return NUMBER;}
 {STARTBRACKET} {charPos+=yyleng; return STARTBRACKET;}
 {CLOSEBRACKET} {charPos+=yyleng; return CLOSEBRACKET;}
 {STARTPAREN} {charPos+=yyleng; return STARTPAREN;}
@@ -77,7 +82,12 @@ ARRAY [a-zA-Z]+[a-zA-Z0-9]*[[0-9]+]
 {SPACE} {}
 {TRUE} {charPos+=yyleng; return TRUE;}
 {FALSE} {charPos+=yyleng; return FALSE;}
-{IDENTIFIER} {charPos+=yyleng; return IDENTIFIER;}
+{IDENTIFIER} {
+    charPos+=yyleng; 
+    char * token = new char[yyleng];
+    strcpy(token, yytext);
+    yylval.op_val = token;
+    return IDENTIFIER;}
 {COMMENT} {}
 {NEWLINE} {++lineNum; charPos = 0;}
 {INVALID} {printf("ERROR at line %d pos %d in %s\n",lineNum,charPos,yytext);}

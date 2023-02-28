@@ -7,5 +7,15 @@ bison:
 	bison -v -d --file-prefix=y bison.y
 	gcc -o parser lex.yy.c y.tab.c -lfl
 	./parser testInput/factorial.ppf
+
+bison.tab.c bison.tab.h: bison.y
+	bison -t -v -d bison.y
+
+lex.yy.c: mini_l.lex bison.tab.h
+	flex mini_l.lex
+
+add: lex.yy.c bison.tab.c bison.tab.h
+	g++ -o parser bison.tab.c lex.yy.c  -lfl
+	./parser testInput/minFiles/add.min
 clean:
 	rm parser
