@@ -4,3 +4,6 @@ parser
 y.output
 y.tab.c
 y.tab.h
+bison.output
+bison.tab.c
+bison.tab.h
