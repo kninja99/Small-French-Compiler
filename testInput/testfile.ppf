@@ -1,3 +1,5 @@
-fonction main(ent a){
-    
+fonction main(){
+    ent a;
+    ent b;
+    ent c;
 }
