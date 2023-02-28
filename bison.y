@@ -30,7 +30,10 @@ functions: function {}
     ;
 
 function: FUNCTION IDENTIFIER STARTPAREN args CLOSEPAREN STARTBRACKET statements CLOSEBRACKET {
+    // main code generation should occure here
     printf("func %s\n",$2);
+    // args
+    // statements
     printf("endfunc %s\n",$2);
 }
     ;
