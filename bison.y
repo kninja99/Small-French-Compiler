@@ -34,7 +34,7 @@ function: FUNCTION IDENTIFIER STARTPAREN args CLOSEPAREN STARTBRACKET statements
     printf("func %s\n",$2);
     // args
     // statements
-    printf("%s\n", $7);
+    printf("%s", $7);
     printf("endfunc %s\n",$2);
 }
     ;
@@ -51,6 +51,8 @@ arg: INTEGER IDENTIFIER {}
 statements: %empty /* epsilon */ {$$ = "";}
     | statement ENDLINE statements {
         char* temp = strdup($1);
+        // adds a new line seperating statements
+        strcat(temp,"\n");
         char* temp2 = strdup($3);
 
         $$ = strcat(temp,temp2);
@@ -70,10 +72,10 @@ statement: declaration {
     ;
 
 declaration: INTEGER IDENTIFIER {
+        // . IDENT formatting
         char temp[]= ". ";
         char* ident = strdup($2);
-
-        // . IDENT
+        // making a copy and concatinating 
         $$ = strdup(strcat(temp, ident));
     }
     | INTEGER ARRAY {}
