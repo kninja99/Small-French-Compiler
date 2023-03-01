@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <string>
 #include <string.h>
+#include "CodeNode.h"
 extern FILE* yyin;
 extern int lineNum;
 extern int charPos;
@@ -12,35 +13,48 @@ void yyerror(const char *msg);
 
 %start prog_start
 %union {
+  struct CodeNode *code_node;
   char *op_val;
 }
 %token STARTBRACKET CLOSEBRACKET STARTPAREN CLOSEPAREN INTEGER ADD SUBTRACT DIVIDE MULTIPLICATION ASSIGNMENT LESSTHAN GREATERTHAN EQUAL NOTEQUAL LESSTHANEQUAL GREATERTHANEQUAL OUTPUT INPUT DO WHILE RETURN FUNCTION ELSE IF ENDLINE TRUE FALSE COMMA ARRAY STARTBRACE ENDBRACE
 %token <op_val> NUMBER 
 %token <op_val> IDENTIFIER
-%type <op_val> declaration
-%type <op_val> statements
-%type <op_val> statement
-%type <op_val> assignment
-%type <op_val> factor
-%type <op_val> term
-%type <op_val> expression
-%type <op_val> addop
+%type <code_node> functions
+%type <code_node> function
 %%
 prog_start: %empty /* epsilon */ {}
-    | functions {}
+    | functions {
+        CodeNode *code_node = $1;
+
+        printf("$s\n", code_node -> code.c_str());
+    }
     ;
 
-functions: function {}
-    | function functions {}
+functions: function {
+    CodeNode *code_node = $1;
+    $$ = code_node;
+}
+    | function functions {
+        CodeNode *code_node1 = $1;
+        CodeNode *code_node2 = $2;
+        CodeNode *node = new CodeNode;
+        node -> code = code_node1 -> code + code_node2 -> code;
+        $$ = node;
+    }
     ;
 
 function: FUNCTION IDENTIFIER STARTPAREN args CLOSEPAREN STARTBRACKET statements CLOSEBRACKET {
-    // main code generation should occure here
-    printf("func %s\n",$2);
+    CodeNode *node = new CodeNode;
+    std::string func_name = $2;
+    node -> code = "";
+    // add the "func IDENTIFIER"
+    node -> code += std::string("func") + func_name + std::string("\n");
     // args
+
     // statements
-    printf("%s", $7);
-    printf("endfunc %s\n",$2);
+
+    // end function
+    node -> code += std::string("endfunc");
 }
     ;
 
@@ -49,18 +63,15 @@ args: arg {}
     | %empty /* epsilon */ {}
     ;
 
-arg: INTEGER IDENTIFIER {}
+arg: INTEGER IDENTIFIER {
+        
+    }
     | expression {}
     ;
 
-statements: %empty /* epsilon */ {$$ = "";}
+statements: %empty /* epsilon */ {}
     | statement ENDLINE statements {
-        char* temp = strdup($1);
-        // adds a new line seperating statements
-        strcat(temp,"\n");
-        char* temp2 = strdup($3);
 
-        $$ = strcat(temp,temp2);
     }
     | conditionals statements {}
     | whileloop statements {}
@@ -68,10 +79,10 @@ statements: %empty /* epsilon */ {$$ = "";}
     ;
 
 statement: declaration {
-        $$ = $1;
+       
     }
     | assignment {
-        $$ = $1;
+        
     }
     | expression {}
     | io {}
@@ -79,11 +90,7 @@ statement: declaration {
     ;
 
 declaration: INTEGER IDENTIFIER {
-        // . IDENT formatting
-        char temp[]= ". ";
-        char* ident = strdup($2);
-        // making a copy and concatinating 
-        $$ = strdup(strcat(temp, ident));
+        
     }
     | INTEGER ARRAY {}
     ;
@@ -92,28 +99,7 @@ function_call: IDENTIFIER STARTPAREN args CLOSEPAREN {}
     ;
 
 assignment: IDENTIFIER ASSIGNMENT expression {
-        // = dst, src
-        char* ident = strdup($1);
-        char* expres = strdup($3);
-        if(expres[0] == '+' || expres[0] == '-'){
-            // building string
-            strcat(ident, " ");
-            strcat(ident, expres);
-            char temp = ident[0];
-            ident[2] = temp;
-            ident[0] = expres[0];
-            // making a copy and concatinating 
-            $$ = strdup(ident);
-        }
-        else {
-            char temp[]= "= ";
-            // building string
-            strcat(temp, ident);
-            strcat(temp, ", ");
-            strcat(temp, expres);
-            // making a copy and concatinating 
-            $$ = strdup(temp);
-        }
+        
         
     }
     | declaration ASSIGNMENT expression {}
@@ -125,22 +111,10 @@ io: OUTPUT IDENTIFIER {}
     ;
 
 expression: expression addop term {
-        // + dst, src1, src2
-        char temp[]= "_temp0";
-        char* expression = strdup($1);
-        char* op = strdup($2);
-        char* term = strdup($3);
-        printf("%s\n", term);
-        //printf("%s %s, %s\n", op, expression, term);
-        strcat(op, ", ");
-        strcat(op, expression);
-        strcat(op, ", ");
-        strcat(op, term);
 
-        $$  = strdup(op);
     }
     | term {
-        $$ = strdup($1);   
+          
     }
     | STARTBRACKET arraynumbers CLOSEBRACKET {}
     ;
@@ -150,24 +124,24 @@ arraynumbers: NUMBER {}
     ;
 
 addop: ADD {
-        char plus[] = "+";
-        $$ = strdup(plus);
+        
     }
     | SUBTRACT {
-        char minus[] = "-";
-        $$ = strdup(minus);
+        
     }
     ;
 
 term: term multop factor {}
-    | factor {$$ = $1;}
+    | factor {}
     ;
 
 multop: MULTIPLICATION {}
     | DIVIDE {}
 
 factor: STARTPAREN expression CLOSEPAREN {} 
-    | NUMBER {$$ = $1;}
+    | NUMBER {
+        
+    }
     | IDENTIFIER {}
     | function_call {}
     | ARRAY {}
