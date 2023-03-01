@@ -24,6 +24,7 @@ void yyerror(const char *msg);
 %type <op_val> factor
 %type <op_val> term
 %type <op_val> expression
+%type <op_val> addop
 %%
 prog_start: %empty /* epsilon */ {}
     | functions {}
@@ -92,15 +93,28 @@ function_call: IDENTIFIER STARTPAREN args CLOSEPAREN {}
 
 assignment: IDENTIFIER ASSIGNMENT expression {
         // = dst, src
-        char temp[]= "= ";
         char* ident = strdup($1);
         char* expres = strdup($3);
-        // building string
-        strcat(temp, ident);
-        strcat(temp, ", ");
-        strcat(temp, expres);
-        // making a copy and concatinating 
-        $$ = strdup(temp);
+        if(expres[0] == '+' || expres[0] == '-'){
+            // building string
+            strcat(ident, " ");
+            strcat(ident, expres);
+            char temp = ident[0];
+            ident[2] = temp;
+            ident[0] = expres[0];
+            // making a copy and concatinating 
+            $$ = strdup(ident);
+        }
+        else {
+            char temp[]= "= ";
+            // building string
+            strcat(temp, ident);
+            strcat(temp, ", ");
+            strcat(temp, expres);
+            // making a copy and concatinating 
+            $$ = strdup(temp);
+        }
+        
     }
     | declaration ASSIGNMENT expression {}
     | ARRAY ASSIGNMENT expression {}
@@ -112,11 +126,22 @@ io: OUTPUT IDENTIFIER {}
 
 expression: expression addop term {
         // + dst, src1, src2
-        char temp[]= " _temp0 ";
-        $$  = strdup(temp);
+        char temp[]= "_temp0";
+        char* expression = strdup($1);
+        char* op = strdup($2);
+        char* term = strdup($3);
+        printf("%s\n", term);
+        //printf("%s %s, %s\n", op, expression, term);
+        strcat(op, ", ");
+        strcat(op, expression);
+        strcat(op, ", ");
+        strcat(op, term);
 
+        $$  = strdup(op);
     }
-    | term {}
+    | term {
+        $$ = strdup($1);   
+    }
     | STARTBRACKET arraynumbers CLOSEBRACKET {}
     ;
 arraynumbers: NUMBER {}
@@ -124,8 +149,14 @@ arraynumbers: NUMBER {}
     | %empty /* epsilon */ {}
     ;
 
-addop: ADD {}
-    | SUBTRACT {}
+addop: ADD {
+        char plus[] = "+";
+        $$ = strdup(plus);
+    }
+    | SUBTRACT {
+        char minus[] = "-";
+        $$ = strdup(minus);
+    }
     ;
 
 term: term multop factor {}
