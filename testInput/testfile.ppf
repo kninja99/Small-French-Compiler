@@ -1,5 +1,4 @@
 fonction main(){
     ent a;
-    ent b;
-    ent c;
+    a -> 100;
 }

@@ -20,6 +20,10 @@ void yyerror(const char *msg);
 %type <op_val> declaration
 %type <op_val> statements
 %type <op_val> statement
+%type <op_val> assignment
+%type <op_val> factor
+%type <op_val> term
+%type <op_val> expression
 %%
 prog_start: %empty /* epsilon */ {}
     | functions {}
@@ -65,7 +69,9 @@ statements: %empty /* epsilon */ {$$ = "";}
 statement: declaration {
         $$ = $1;
     }
-    | assignment {}
+    | assignment {
+        $$ = $1;
+    }
     | expression {}
     | io {}
     | return {}
@@ -84,7 +90,18 @@ declaration: INTEGER IDENTIFIER {
 function_call: IDENTIFIER STARTPAREN args CLOSEPAREN {}
     ;
 
-assignment: IDENTIFIER ASSIGNMENT expression {}
+assignment: IDENTIFIER ASSIGNMENT expression {
+        // = dst, src
+        char temp[]= "= ";
+        char* ident = strdup($1);
+        char* expres = strdup($3);
+        // building string
+        strcat(temp, ident);
+        strcat(temp, ", ");
+        strcat(temp, expres);
+        // making a copy and concatinating 
+        $$ = strdup(temp);
+    }
     | declaration ASSIGNMENT expression {}
     | ARRAY ASSIGNMENT expression {}
     ;
@@ -93,7 +110,9 @@ io: OUTPUT IDENTIFIER {}
     | INPUT IDENTIFIER {}
     ;
 
-expression: expression addop term {}
+expression: expression addop term {
+        // + dst, src1, src2
+    }
     | term {}
     | STARTBRACKET arraynumbers CLOSEBRACKET
     ;
@@ -107,14 +126,14 @@ addop: ADD {}
     ;
 
 term: term multop factor {}
-    | factor {}
+    | factor {$$ = $1;}
     ;
 
 multop: MULTIPLICATION {}
     | DIVIDE {}
 
 factor: STARTPAREN expression CLOSEPAREN {} 
-    | NUMBER {}
+    | NUMBER {$$ = $1;}
     | IDENTIFIER {}
     | function_call {}
     | ARRAY {}

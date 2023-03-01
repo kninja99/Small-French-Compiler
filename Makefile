@@ -21,4 +21,4 @@ test: lex.yy.c bison.tab.c bison.tab.h
 	g++ -o parser bison.tab.c lex.yy.c  -lfl
 	./parser testInput/testfile.ppf
 clean:
-	rm parser
+	rm parser bison.tab.c lex.yy.c bison.tab.h bison.output
