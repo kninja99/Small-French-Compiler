@@ -25,7 +25,8 @@ void yyerror(const char *msg);
 prog_start: %empty /* epsilon */ {}
     | functions {
         CodeNode *code_node = $1;
-        // seg faulting on print statement...idk why
+        // seg faulting on print statement...idk why. Might be because I havent
+        // finished implementing function rule
         printf("$s\n", code_node -> code.c_str());
     }
     ;
