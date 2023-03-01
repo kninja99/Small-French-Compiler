@@ -27,18 +27,21 @@ prog_start: %empty /* epsilon */ {}
         CodeNode *code_node = $1;
         // seg faulting on print statement...idk why. Might be because I havent
         // finished implementing function rule
-        printf("$s\n", code_node -> code.c_str());
+        printf("%s\n", code_node -> code.c_str());
     }
     ;
 
 functions: function {
     CodeNode *code_node = $1;
-    $$ = code_node;
+    CodeNode *node = new CodeNode;
+    node = code_node;
+    $$ = node;
 }
     | function functions {
         CodeNode *code_node1 = $1;
         CodeNode *code_node2 = $2;
         CodeNode *node = new CodeNode;
+        node -> code = "";
         node -> code = code_node1 -> code + code_node2 -> code;
         $$ = node;
     }
@@ -49,13 +52,15 @@ function: FUNCTION IDENTIFIER STARTPAREN args CLOSEPAREN STARTBRACKET statements
     std::string func_name = $2;
     node -> code = "";
     // add the "func IDENTIFIER"
-    node -> code += std::string("func") + func_name + std::string("\n");
+    node -> code += std::string("func ") + func_name + std::string("\n");
     // args
 
     // statements
 
     // end function
     node -> code += std::string("endfunc");
+
+    $$ = node;
 }
     ;
 
