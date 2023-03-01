@@ -112,9 +112,12 @@ io: OUTPUT IDENTIFIER {}
 
 expression: expression addop term {
         // + dst, src1, src2
+        char temp[]= " _temp0 ";
+        $$  = strdup(temp);
+
     }
     | term {}
-    | STARTBRACKET arraynumbers CLOSEBRACKET
+    | STARTBRACKET arraynumbers CLOSEBRACKET {}
     ;
 arraynumbers: NUMBER {}
     | NUMBER COMMA arraynumbers {}
