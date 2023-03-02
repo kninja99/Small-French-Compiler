@@ -6,7 +6,7 @@
 extern FILE* yyin;
 extern int lineNum;
 extern int charPos;
-
+int argCount = 0;
 extern int yylex(void);
 void yyerror(const char *msg);
 std::string returnTempVarName(){
@@ -20,7 +20,6 @@ std::string returnTempVarName(){
 }
 
 std::string returnArgument(){
-    static int argCount = 0;
     std::string argName("$");
     char strCount[2];
     sprintf(strCount,"%d",argCount);
@@ -92,16 +91,18 @@ function: FUNCTION IDENTIFIER STARTPAREN args CLOSEPAREN STARTBRACKET statements
     node -> code += statements->code;
 
     // end function
-    node -> code += std::string("endfunc");
+    node -> code += std::string("endfunc\n\n");
 
     $$ = node;
 }
     ;
 
 args: arg {
+        argCount = 0;
         $$ = $1;
     }
     | arg COMMA args {
+        argCount = 0;
         CodeNode *node = new CodeNode;
         CodeNode *arg = $1;
         CodeNode *args = $3;
