@@ -25,6 +25,9 @@ void yyerror(const char *msg);
 %type <code_node> statement
 %type <code_node> declaration
 %type <code_node> assignment
+%type <code_node> expression
+%type <code_node> factor
+%type <code_node> term
 %%
 prog_start: %empty /* epsilon */ {}
     | functions {
@@ -126,8 +129,14 @@ function_call: IDENTIFIER STARTPAREN args CLOSEPAREN {}
     ;
 
 assignment: IDENTIFIER ASSIGNMENT expression {
-        
-        
+        // = a, b
+        CodeNode *node = new CodeNode;
+        std::string ident = $1;
+        CodeNode *expression = $3;
+
+        node -> code = std::string("= ") + ident + std::string(", ") + expression -> code;
+
+        $$ = node;
     }
     | declaration ASSIGNMENT expression {}
     | ARRAY ASSIGNMENT expression {}
@@ -141,7 +150,8 @@ expression: expression addop term {
 
     }
     | term {
-          
+        CodeNode *node = $1;
+        $$ = node;
     }
     | STARTBRACKET arraynumbers CLOSEBRACKET {}
     ;
@@ -159,7 +169,9 @@ addop: ADD {
     ;
 
 term: term multop factor {}
-    | factor {}
+    | factor {
+
+    }
     ;
 
 multop: MULTIPLICATION {}
@@ -167,9 +179,15 @@ multop: MULTIPLICATION {}
 
 factor: STARTPAREN expression CLOSEPAREN {} 
     | NUMBER {
-        
+        CodeNode *node = new CodeNode;
+        node -> code = $1;
+        $$ = node;
     }
-    | IDENTIFIER {}
+    | IDENTIFIER {
+        CodeNode *node = new CodeNode;
+        node -> code = $1;
+        $$ = node;
+    }
     | function_call {}
     | ARRAY {}
     ;
