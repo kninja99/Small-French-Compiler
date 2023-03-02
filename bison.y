@@ -192,10 +192,12 @@ arraynumbers: NUMBER {}
     ;
 
 addop: ADD {
-        $$ = "+";
+        char op[] = "+";
+        $$ = op;
     }
     | SUBTRACT {
-        $$ = "-";
+        char op[] = "-";
+        $$ = op;
     }
     ;
 
@@ -213,13 +215,16 @@ term: term multop factor {
     ;
 
 multop: MULTIPLICATION {
-    $$ = "*";
-}
+        char op[] = "*";
+        $$ = op;
+    }
     | DIVIDE {
-        $$ = "/";
+        char op[] = "/";
+        $$ = op;
     }
     | MOD {
-        $$ = "%";
+        char op[] = "%";
+        $$ = op;
     }
 
 factor: STARTPAREN expression CLOSEPAREN {} 
