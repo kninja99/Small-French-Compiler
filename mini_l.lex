@@ -17,6 +17,7 @@ ADD [+]
 SUBTRACT "-"
 DIVIDE "/"
 MULTIPLICATION "*"
+MOD "%"
 ASSIGNMENT "->"
 LESSTHAN   "<"
 GREATERTHAN ">"
@@ -63,6 +64,7 @@ ARRAY [a-zA-Z]+[a-zA-Z0-9]*[[0-9]+]
 {SUBTRACT} {charPos+=yyleng; return SUBTRACT;}
 {DIVIDE} {charPos+=yyleng; return DIVIDE;} 
 {MULTIPLICATION} {charPos+=yyleng; return MULTIPLICATION;} 
+{MOD} {charPos+=yyleng; return MOD;}
 {ASSIGNMENT} {charPos+=yyleng; return ASSIGNMENT;}
 {LESSTHAN}   {charPos+=yyleng; return LESSTHAN;}
 {GREATERTHAN} {charPos+=yyleng; return GREATERTHAN;}

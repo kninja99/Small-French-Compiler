@@ -9,6 +9,15 @@ extern int charPos;
 
 extern int yylex(void);
 void yyerror(const char *msg);
+std::string returnTempVarName(){
+    static int count = 0;
+    std::string varName("_temp");
+    char strCount[2];
+    sprintf(strCount,"%d",count);
+    varName += std::string(strCount);
+    count++;
+    return varName;
+}
 %}
 
 %start prog_start
@@ -16,7 +25,7 @@ void yyerror(const char *msg);
   struct CodeNode *code_node;
   char *op_val;
 }
-%token STARTBRACKET CLOSEBRACKET STARTPAREN CLOSEPAREN INTEGER ADD SUBTRACT DIVIDE MULTIPLICATION ASSIGNMENT LESSTHAN GREATERTHAN EQUAL NOTEQUAL LESSTHANEQUAL GREATERTHANEQUAL OUTPUT INPUT DO WHILE RETURN FUNCTION ELSE IF ENDLINE TRUE FALSE COMMA ARRAY STARTBRACE ENDBRACE
+%token STARTBRACKET CLOSEBRACKET STARTPAREN CLOSEPAREN INTEGER ADD SUBTRACT DIVIDE MULTIPLICATION MOD ASSIGNMENT LESSTHAN GREATERTHAN EQUAL NOTEQUAL LESSTHANEQUAL GREATERTHANEQUAL OUTPUT INPUT DO WHILE RETURN FUNCTION ELSE IF ENDLINE TRUE FALSE COMMA ARRAY STARTBRACE ENDBRACE
 %token <op_val> NUMBER 
 %token <op_val> IDENTIFIER
 %type <code_node> functions
@@ -165,7 +174,7 @@ io: OUTPUT IDENTIFIER {
 
 expression: expression addop term {
     CodeNode *node = new CodeNode;
-    std::string tempVar("_temp0");
+    std::string tempVar = returnTempVarName();
     node->name = tempVar;
     node->code= $1->code + $3->code + std::string(". ") + tempVar + std::string("\n");
     node->code+= std::string($2) + std::string(" ") +tempVar + std::string(", ") + $1->name + std::string(", ") + $3->name + std::string("\n");
@@ -192,7 +201,7 @@ addop: ADD {
 
 term: term multop factor {
     CodeNode *node = new CodeNode;
-    std::string tempVar("_temp0");
+    std::string tempVar = returnTempVarName();
     node->name = tempVar;
     node->code= $1->code + $3->code + std::string(". ") + tempVar + std::string("\n");
     node->code+= std::string($2) + std::string(" ") +tempVar + std::string(", ") + $1->name + std::string(", ") + $3->name + std::string("\n");
@@ -204,9 +213,14 @@ term: term multop factor {
     ;
 
 multop: MULTIPLICATION {
-
+    $$ = "*";
 }
-    | DIVIDE {}
+    | DIVIDE {
+        $$ = "/";
+    }
+    | MOD {
+        $$ = "%";
+    }
 
 factor: STARTPAREN expression CLOSEPAREN {} 
     | NUMBER {
