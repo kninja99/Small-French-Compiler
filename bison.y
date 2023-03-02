@@ -173,6 +173,7 @@ declaration: INTEGER IDENTIFIER {
         // . ident
         CodeNode *node = new CodeNode;
         node -> code = std::string(". ") + $2;
+        node -> name = $2;
         $$ = node;
     }
     | INTEGER ARRAY {}
@@ -191,7 +192,17 @@ assignment: IDENTIFIER ASSIGNMENT expression {
 
         $$ = node;
     }
-    | declaration ASSIGNMENT expression {}
+    | declaration ASSIGNMENT expression {
+        CodeNode *node = new CodeNode;
+        CodeNode *decl = $1;
+        CodeNode *expression = $3;
+        // init values
+        node->code = decl -> code+ std::string("\n") + $3 -> code; 
+        // assignment
+        node -> code += std::string("= ") + decl -> name + std::string(", ") + expression -> name;
+
+        $$ = node;
+    }
     | ARRAY ASSIGNMENT expression {}
     ;
 

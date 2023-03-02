@@ -1,3 +1,3 @@
 fonction add(ent a, ent b){
-    a -> 10 + b;
+    ent c -> a + b; 
 }
