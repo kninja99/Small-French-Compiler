@@ -17,6 +17,7 @@ lex.yy.c: mini_l.lex bison.tab.h
 add: lex.yy.c bison.tab.c bison.tab.h
 	g++ -o parser bison.tab.c lex.yy.c  -lfl
 	./parser testInput/minFiles/add.min
+	
 test: lex.yy.c bison.tab.c bison.tab.h
 	g++ -o parser bison.tab.c lex.yy.c  -lfl
 	./parser testInput/testfile.ppf

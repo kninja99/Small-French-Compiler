@@ -4,5 +4,5 @@ fonction main(){
     ent c;
     a -> 100;
     b -> 50;
-    c -> b;
+    c -> a + b;
 }

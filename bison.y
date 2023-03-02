@@ -28,6 +28,10 @@ void yyerror(const char *msg);
 %type <code_node> expression
 %type <code_node> factor
 %type <code_node> term
+%type <code_node> io
+%type <code_node> return
+%type <op_val> addop
+%type <op_val> multop
 %%
 prog_start: %empty /* epsilon */ {}
     | functions {
@@ -111,9 +115,18 @@ statement: declaration {
         $$ = node;
         
     }
-    | expression {}
-    | io {}
-    | return {}
+    | expression {
+        CodeNode *node = $1;
+        $$ = node;
+    }
+    | io {
+        CodeNode *node = $1;
+        $$ = node;
+    }
+    | return {
+        CodeNode *node = $1;
+        $$ = node;
+    }
     ;
 
 declaration: INTEGER IDENTIFIER {
@@ -133,8 +146,8 @@ assignment: IDENTIFIER ASSIGNMENT expression {
         CodeNode *node = new CodeNode;
         std::string ident = $1;
         CodeNode *expression = $3;
-
-        node -> code = std::string("= ") + ident + std::string(", ") + expression -> code;
+        node->code = $3->code;
+        node -> code += std::string("= ") + ident + std::string(", ") + expression -> name;
 
         $$ = node;
     }
@@ -142,12 +155,21 @@ assignment: IDENTIFIER ASSIGNMENT expression {
     | ARRAY ASSIGNMENT expression {}
     ;
 
-io: OUTPUT IDENTIFIER {}
+io: OUTPUT IDENTIFIER {
+        CodeNode *node = new CodeNode;
+        node->code = std::string(".> ") + std::string($2);
+        $$ = node;
+}
     | INPUT IDENTIFIER {}
     ;
 
 expression: expression addop term {
-
+    CodeNode *node = new CodeNode;
+    std::string tempVar("_temp0");
+    node->name = tempVar;
+    node->code= $1->code + $3->code + std::string(". ") + tempVar + std::string("\n");
+    node->code+= std::string($2) + std::string(" ") +tempVar + std::string(", ") + $1->name + std::string(", ") + $3->name + std::string("\n");
+    $$ = node;
     }
     | term {
         CodeNode *node = $1;
@@ -161,31 +183,40 @@ arraynumbers: NUMBER {}
     ;
 
 addop: ADD {
-        
+        $$ = "+";
     }
     | SUBTRACT {
-        
+        $$ = "-";
     }
     ;
 
-term: term multop factor {}
+term: term multop factor {
+    CodeNode *node = new CodeNode;
+    std::string tempVar("_temp0");
+    node->name = tempVar;
+    node->code= $1->code + $3->code + std::string(". ") + tempVar + std::string("\n");
+    node->code+= std::string($2) + std::string(" ") +tempVar + std::string(", ") + $1->name + std::string(", ") + $3->name + std::string("\n");
+    $$ = node;
+}
     | factor {
-
+        CodeNode *node = $1;
     }
     ;
 
-multop: MULTIPLICATION {}
+multop: MULTIPLICATION {
+
+}
     | DIVIDE {}
 
 factor: STARTPAREN expression CLOSEPAREN {} 
     | NUMBER {
         CodeNode *node = new CodeNode;
-        node -> code = $1;
+        node -> name = $1;
         $$ = node;
     }
     | IDENTIFIER {
         CodeNode *node = new CodeNode;
-        node -> code = $1;
+        node -> name = $1;
         $$ = node;
     }
     | function_call {}
