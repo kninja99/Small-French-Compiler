@@ -21,6 +21,8 @@ void yyerror(const char *msg);
 %token <op_val> IDENTIFIER
 %type <code_node> functions
 %type <code_node> function
+%type <code_node> statements
+%type <code_node> statement
 %%
 prog_start: %empty /* epsilon */ {}
     | functions {
@@ -49,6 +51,7 @@ functions: function {
 
 function: FUNCTION IDENTIFIER STARTPAREN args CLOSEPAREN STARTBRACKET statements CLOSEBRACKET {
     CodeNode *node = new CodeNode;
+    CodeNode *statements = $7;
     std::string func_name = $2;
     node -> code = "";
     // add the "func IDENTIFIER"
@@ -56,6 +59,7 @@ function: FUNCTION IDENTIFIER STARTPAREN args CLOSEPAREN STARTBRACKET statements
     // args
 
     // statements
+    node -> code += statements->code.c_str() + std::string("\n");
 
     // end function
     node -> code += std::string("endfunc");
@@ -75,7 +79,11 @@ arg: INTEGER IDENTIFIER {
     | expression {}
     ;
 
-statements: %empty /* epsilon */ {}
+statements: %empty /* epsilon */ {
+        CodeNode *node = new CodeNode;
+        node -> code = std::string("");
+        $$ = node;
+    }
     | statement ENDLINE statements {
 
     }
