@@ -23,6 +23,8 @@ void yyerror(const char *msg);
 %type <code_node> function
 %type <code_node> statements
 %type <code_node> statement
+%type <code_node> declaration
+%type <code_node> assignment
 %%
 prog_start: %empty /* epsilon */ {}
     | functions {
@@ -59,7 +61,7 @@ function: FUNCTION IDENTIFIER STARTPAREN args CLOSEPAREN STARTBRACKET statements
     // args
 
     // statements
-    node -> code += statements->code.c_str() + std::string("\n");
+    node -> code += statements->code;
 
     // end function
     node -> code += std::string("endfunc");
@@ -85,7 +87,12 @@ statements: %empty /* epsilon */ {
         $$ = node;
     }
     | statement ENDLINE statements {
-
+        CodeNode *statement = $1;
+        CodeNode *statements = $3;
+        // building up code string
+        CodeNode *node = new CodeNode;
+        node -> code = statement ->code + std::string("\n") + statements -> code;
+        $$ = node;
     }
     | conditionals statements {}
     | whileloop statements {}
@@ -93,9 +100,12 @@ statements: %empty /* epsilon */ {
     ;
 
 statement: declaration {
-       
+       CodeNode *node = $1;
+       $$ = node;
     }
     | assignment {
+        CodeNode *node = $1;
+        $$ = node;
         
     }
     | expression {}
@@ -104,7 +114,10 @@ statement: declaration {
     ;
 
 declaration: INTEGER IDENTIFIER {
-        
+        // . ident
+        CodeNode *node = new CodeNode;
+        node -> code = std::string(". ") + $2;
+        $$ = node;
     }
     | INTEGER ARRAY {}
     ;
