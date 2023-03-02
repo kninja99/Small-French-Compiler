@@ -18,6 +18,16 @@ std::string returnTempVarName(){
     count++;
     return varName;
 }
+
+std::string returnArgument(){
+    static int argCount = 0;
+    std::string argName("$");
+    char strCount[2];
+    sprintf(strCount,"%d",argCount);
+    argName += std::string(strCount);
+    argCount++;
+    return argName;
+}
 %}
 
 %start prog_start
@@ -39,6 +49,8 @@ std::string returnTempVarName(){
 %type <code_node> term
 %type <code_node> io
 %type <code_node> return
+%type <code_node> args
+%type <code_node> arg
 %type <op_val> addop
 %type <op_val> multop
 %%
@@ -75,7 +87,7 @@ function: FUNCTION IDENTIFIER STARTPAREN args CLOSEPAREN STARTBRACKET statements
     // add the "func IDENTIFIER"
     node -> code += std::string("func ") + func_name + std::string("\n");
     // args
-
+    node -> code += $4 -> code;
     // statements
     node -> code += statements->code;
 
@@ -86,13 +98,31 @@ function: FUNCTION IDENTIFIER STARTPAREN args CLOSEPAREN STARTBRACKET statements
 }
     ;
 
-args: arg {}
-    | arg COMMA args {}
-    | %empty /* epsilon */ {}
+args: arg {
+        $$ = $1;
+    }
+    | arg COMMA args {
+        CodeNode *node = new CodeNode;
+        CodeNode *arg = $1;
+        CodeNode *args = $3;
+
+        node -> code += arg -> code + args -> code;
+        $$ = node;
+    }
+    | %empty /* epsilon */ {
+        CodeNode *node = new CodeNode;
+        node -> code = std::string("");
+        $$ = node;
+    }
     ;
 
 arg: INTEGER IDENTIFIER {
-        
+        // . ident (declaration)
+        CodeNode *node = new CodeNode;
+        node -> code = std::string(". ") + $2 + std::string("\n");
+        // assignment
+        node -> code += std::string("= ") + $2 + std::string(", ") +returnArgument() + std::string("\n");
+        $$ = node;
     }
     | expression {}
     ;
