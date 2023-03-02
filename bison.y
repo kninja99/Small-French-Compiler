@@ -309,7 +309,12 @@ whileloop: WHILE STARTPAREN boolean CLOSEPAREN STARTBRACKET statements CLOSEBRAC
 dowhile: DO STARTBRACKET statements CLOSEBRACKET WHILE STARTPAREN boolean CLOSEPAREN ENDLINE {}
     ;
 
-return: RETURN expression {}  
+return: RETURN expression {
+        CodeNode *node = new CodeNode;
+        CodeNode *expression = $2;
+        node -> code = expression -> code + std::string("ret ") + expression -> name;
+        $$ = node;
+    }  
     ; 
  %%
 main(int argc, char *argv[]){
