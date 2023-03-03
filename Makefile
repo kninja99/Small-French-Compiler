@@ -21,6 +21,10 @@ add: lex.yy.c bison.tab.c bison.tab.h
 math: lex.yy.c bison.tab.c bison.tab.h
 	g++ -o parser bison.tab.c lex.yy.c  -lfl
 	./parser testInput/minFiles/math.min
+
+function: lex.yy.c bison.tab.c bison.tab.h
+	g++ -o parser bison.tab.c lex.yy.c  -lfl
+	./parser testInput/minFiles/function.min
 	
 test: lex.yy.c bison.tab.c bison.tab.h
 	g++ -o parser bison.tab.c lex.yy.c  -lfl

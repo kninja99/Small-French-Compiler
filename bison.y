@@ -3,6 +3,7 @@
 #include <string>
 #include <string.h>
 #include "CodeNode.h"
+#include <vector>
 extern FILE* yyin;
 extern int lineNum;
 extern int charPos;
@@ -52,6 +53,8 @@ std::string returnArgument(){
 %type <code_node> arg
 %type <op_val> addop
 %type <op_val> multop
+%type <code_node> function_call
+%type <code_node> function_call_args
 %%
 prog_start: %empty /* epsilon */ {}
     | functions {
@@ -106,8 +109,8 @@ args: arg {
         CodeNode *node = new CodeNode;
         CodeNode *arg = $1;
         CodeNode *args = $3;
-
         node -> code += arg -> code + args -> code;
+        node -> name = arg -> name + std::string(",") +args -> name;
         $$ = node;
     }
     | %empty /* epsilon */ {
@@ -120,12 +123,15 @@ args: arg {
 arg: INTEGER IDENTIFIER {
         // . ident (declaration)
         CodeNode *node = new CodeNode;
+        node -> name = $2;
         node -> code = std::string(". ") + $2 + std::string("\n");
         // assignment
         node -> code += std::string("= ") + $2 + std::string(", ") +returnArgument() + std::string("\n");
         $$ = node;
     }
-    | expression {}
+    | expression {
+        $$ = $1;
+    }
     ;
 
 statements: %empty /* epsilon */ {
@@ -179,9 +185,35 @@ declaration: INTEGER IDENTIFIER {
     | INTEGER ARRAY {}
     ;
 
-function_call: IDENTIFIER STARTPAREN args CLOSEPAREN {}
+function_call: IDENTIFIER STARTPAREN function_call_args CLOSEPAREN {
+        CodeNode *node = new CodeNode;
+        CodeNode *args = $3;
+        node -> code = args -> code;
+        $$ = node; 
+    }
+    | IDENTIFIER STARTPAREN CLOSEPAREN {
+        CodeNode *node = new CodeNode;
+        node -> code = std::string("");
+        $$ = node;
+    }
     ;
 
+function_call_args: expression {
+        CodeNode *node = new CodeNode;
+        CodeNode *expression = $1;
+        node -> code = std::string("param ") + expression -> name + std::string("\n");
+        $$ = node;
+    }
+    | expression COMMA function_call_args {
+        CodeNode *node = new CodeNode;
+        CodeNode *expression = $1;
+        CodeNode *expression2 = $3;
+        node -> code = std::string("param ") + expression -> name + std::string("\n");
+        node -> code += expression2 -> code;
+        $$ = node;
+    }
+    | %empty {}
+    ;
 assignment: IDENTIFIER ASSIGNMENT expression {
         // = a, b
         CodeNode *node = new CodeNode;
