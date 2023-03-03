@@ -212,7 +212,11 @@ function_call_args: expression {
         node -> code += expression2 -> code;
         $$ = node;
     }
-    | %empty {}
+    | %empty {
+        CodeNode *node = new CodeNode;
+        node -> code = std::string("");
+        $$ = node;
+    }
     ;
 assignment: IDENTIFIER ASSIGNMENT expression {
         // = a, b

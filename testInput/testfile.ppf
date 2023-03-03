@@ -10,7 +10,7 @@ fonction main(){
 
     a -> 100;
     b -> 50;
-    c -> add(a,b);
+    c -> add();
 
     sortir << c;
 }
