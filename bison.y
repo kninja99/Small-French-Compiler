@@ -188,7 +188,13 @@ declaration: INTEGER IDENTIFIER {
 function_call: IDENTIFIER STARTPAREN function_call_args CLOSEPAREN {
         CodeNode *node = new CodeNode;
         CodeNode *args = $3;
+        std::string temp = returnTempVarName();
+        node -> name = temp;
+        // construct params
         node -> code = args -> code;
+        // make temp var and store
+        node -> code += std::string(". ") + temp + std::string("\n");
+        node -> code += std::string("call ") + $1 + std::string(", ") + temp + std::string("\n");
         $$ = node; 
     }
     | IDENTIFIER STARTPAREN CLOSEPAREN {
@@ -316,7 +322,9 @@ factor: STARTPAREN expression CLOSEPAREN {}
         node -> name = $1;
         $$ = node;
     }
-    | function_call {}
+    | function_call {
+        $$ = $1;
+    }
     | ARRAY {}
     ;
 
