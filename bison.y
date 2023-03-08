@@ -248,7 +248,18 @@ assignment: IDENTIFIER ASSIGNMENT expression {
 
         $$ = node;
     }
-    | ARRAY ASSIGNMENT expression {}
+    // for array assignment
+    | IDENTIFIER STARTBRACE NUMBER ENDBRACE ASSIGNMENT expression{
+        CodeNode *node = new CodeNode;
+        std::string ident = $1;
+        std::string mem = $3;
+        CodeNode *expression = $6;
+        node -> code = expression -> code;
+        node -> code += std::string("[]= ") + ident + std::string(", ") + mem;
+        node -> code += std::string(", ") + expression -> name;
+
+        $$ = node;
+    }
     ;
 
 io: OUTPUT IDENTIFIER {
