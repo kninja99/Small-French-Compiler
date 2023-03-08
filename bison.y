@@ -197,11 +197,6 @@ function_call: IDENTIFIER STARTPAREN function_call_args CLOSEPAREN {
         node -> code += std::string("call ") + $1 + std::string(", ") + temp + std::string("\n");
         $$ = node; 
     }
-    | IDENTIFIER STARTPAREN CLOSEPAREN {
-        CodeNode *node = new CodeNode;
-        node -> code = std::string("");
-        $$ = node;
-    }
     ;
 
 function_call_args: expression {
