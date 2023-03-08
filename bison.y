@@ -352,7 +352,19 @@ factor: STARTPAREN expression CLOSEPAREN {}
     | function_call {
         $$ = $1;
     }
-    | ARRAY {}
+    | IDENTIFIER STARTBRACE NUMBER ENDBRACE {
+        CodeNode *node = new CodeNode;
+        std::string temp =  returnTempVarName();
+        std::string ident = $1;
+        std::string mem = $3;
+        node -> name = temp;
+        // declaring temp variable
+        node -> code = std::string(". ") + temp + std::string("\n");
+        // accessing memory
+        node -> code += std::string("=[] ") + temp + std::string(", ") + ident + std::string(", ") + mem + std::string("\n");
+
+        $$ = node;
+    }
     ;
 
 conditionals: IF STARTPAREN boolean CLOSEPAREN STARTBRACKET statements CLOSEBRACKET condition {}
