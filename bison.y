@@ -10,6 +10,62 @@ extern int charPos;
 int argCount = 0;
 extern int yylex(void);
 void yyerror(const char *msg);
+
+enum Type { Integer, Array };
+struct Symbol {
+  std::string name;
+  Type type;
+};
+struct Function {
+  std::string name;
+  std::vector<Symbol> declarations;
+};
+
+std::vector <Function> symbol_table;
+
+
+Function *get_function() {
+  int last = symbol_table.size()-1;
+  return &symbol_table[last];
+}
+
+bool find(std::string &value) {
+  Function *f = get_function();
+  for(int i=0; i < f->declarations.size(); i++) {
+    Symbol *s = &f->declarations[i];
+    if (s->name == value) {
+      return true;
+    }
+  }
+  return false;
+}
+
+void add_function_to_symbol_table(std::string &value) {
+  Function f; 
+  f.name = value; 
+  symbol_table.push_back(f);
+}
+
+void add_variable_to_symbol_table(std::string &value, Type t) {
+  Symbol s;
+  s.name = value;
+  s.type = t;
+  Function *f = get_function();
+  f->declarations.push_back(s);
+}
+
+void print_symbol_table(void) {
+  printf("symbol table:\n");
+  printf("--------------------\n");
+  for(int i=0; i<symbol_table.size(); i++) {
+    printf("function: %s\n", symbol_table[i].name.c_str());
+    for(int j=0; j<symbol_table[i].declarations.size(); j++) {
+      printf("  locals: %s\n", symbol_table[i].declarations[j].name.c_str());
+    }
+  }
+  printf("--------------------\n");
+}
+
 std::string returnTempVarName(){
     static int count = 0;
     std::string varName("_temp");
@@ -178,8 +234,10 @@ statement: declaration {
 declaration: INTEGER IDENTIFIER {
         // . ident
         CodeNode *node = new CodeNode;
+        Type t = Integer;
+        std::string ident = $2;
         node -> code = std::string(". ") + $2;
-        node -> name = $2;
+        node -> name = ident;
         $$ = node;
     }
     // for array declaration 
@@ -406,6 +464,7 @@ main(int argc, char *argv[]){
     FILE *fp = fopen(argv[1],"r");
     yyin = fp;
     yyparse();
+    print_symbol_table();
 }
 int yyerror(char *error) {
     printf("Error at line %d, position %d: %s", lineNum, charPos, error);
