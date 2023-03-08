@@ -266,7 +266,20 @@ io: OUTPUT IDENTIFIER {
         CodeNode *node = new CodeNode;
         node->code = std::string(".> ") + std::string($2);
         $$ = node;
-}
+    }
+    | OUTPUT IDENTIFIER STARTBRACE NUMBER ENDBRACE {
+        CodeNode *node = new CodeNode;
+        std::string tempVar = returnTempVarName();
+        std::string ident = $2;
+        std::string mem = $4;
+        node-> code = std::string(". ") + tempVar + std::string("\n");
+        // array access =[] dst, src, index
+        node -> code += std::string("=[] ") + tempVar + std::string(", ") + ident;
+        node -> code += std::string(", ") + mem + std::string("\n");
+        // print statement
+        node -> code += std::string(".> ") + tempVar;
+        $$ = node;
+    }
     | INPUT IDENTIFIER {}
     ;
 

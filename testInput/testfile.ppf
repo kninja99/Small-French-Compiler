@@ -7,4 +7,11 @@ fonction main(){
     c -> 5;
 
     a[0] -> b + c;
+    sortir << a[0];
+
+    a[1] -> 100;
+    sortir << a[1];
+
+    a[2] -> 200;
+    sortir << a[2];
 }
