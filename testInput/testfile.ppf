@@ -15,6 +15,6 @@ fonction main(){
     a[2] -> 200;
     sortir << a[2];
 
-    a[3] -> a[0] * a[1];
+    a[3] -> a[0] * (a[1] + c);
     sortir << a[3];
 }

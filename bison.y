@@ -338,7 +338,9 @@ multop: MULTIPLICATION {
         $$ = op;
     }
 
-factor: STARTPAREN expression CLOSEPAREN {} 
+factor: STARTPAREN expression CLOSEPAREN {
+        $$ = $2;
+    } 
     | NUMBER {
         CodeNode *node = new CodeNode;
         node -> name = $1;
