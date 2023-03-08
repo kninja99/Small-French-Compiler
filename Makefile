@@ -16,15 +16,19 @@ lex.yy.c: mini_l.lex bison.tab.h
 
 add: lex.yy.c bison.tab.c bison.tab.h
 	g++ -o parser bison.tab.c lex.yy.c  -lfl
-	./parser testInput/minFiles/add.min
+	./parser testInput/minFiles/add.ppf
 
 math: lex.yy.c bison.tab.c bison.tab.h
 	g++ -o parser bison.tab.c lex.yy.c  -lfl
-	./parser testInput/minFiles/math.min
+	./parser testInput/minFiles/math.ppf
 
 function: lex.yy.c bison.tab.c bison.tab.h
 	g++ -o parser bison.tab.c lex.yy.c  -lfl
-	./parser testInput/minFiles/function.min
+	./parser testInput/minFiles/function.ppf
+
+array: lex.yy.c bison.tab.c bison.tab.h
+	g++ -o parser bison.tab.c lex.yy.c  -lfl
+	./parser testInput/minFiles/array.ppf
 	
 test: lex.yy.c bison.tab.c bison.tab.h
 	g++ -o parser bison.tab.c lex.yy.c  -lfl
