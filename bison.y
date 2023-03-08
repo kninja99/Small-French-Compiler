@@ -207,7 +207,8 @@ function_call: IDENTIFIER STARTPAREN function_call_args CLOSEPAREN {
 function_call_args: expression {
         CodeNode *node = new CodeNode;
         CodeNode *expression = $1;
-        node -> code = std::string("param ") + expression -> name + std::string("\n");
+        node -> code = expression -> code;
+        node -> code += std::string("param ") + expression -> name + std::string("\n");
         $$ = node;
     }
     | expression COMMA function_call_args {
