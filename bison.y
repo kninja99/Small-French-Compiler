@@ -182,7 +182,14 @@ declaration: INTEGER IDENTIFIER {
         node -> name = $2;
         $$ = node;
     }
-    | INTEGER ARRAY {}
+    // for array declaration 
+    | INTEGER IDENTIFIER STARTBRACE NUMBER ENDBRACE {
+        CodeNode *node = new CodeNode;
+        std::string ident = $2;
+        std::string size = $4;
+        node -> code = std::string(".[] " + ident + std::string(", ") + size);
+        $$ = node;
+    }
     ;
 
 function_call: IDENTIFIER STARTPAREN function_call_args CLOSEPAREN {

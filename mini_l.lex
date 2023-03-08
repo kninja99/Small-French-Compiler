@@ -42,10 +42,8 @@ NEWLINE \n
 COMMA ,
 STARTBRACE "["
 ENDBRACE "]"
-ARRAY [a-zA-Z]+[a-zA-Z0-9]*[[0-9]+]
 
 %%
-{ARRAY} {charPos+=yyleng; return ARRAY;}
 {STARTBRACE} {charPos+=yyleng; return STARTBRACE;}
 {ENDBRACE} {charPos+=yyleng; return ENDBRACE;}
 {COMMA} {charPos+=yyleng; return COMMA;}
