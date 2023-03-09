@@ -1,3 +1,5 @@
 fonction main(){
-    ent sortir;
+    ent b;
+    ent arr[10];
+    arr -> 10;
 }

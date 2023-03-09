@@ -62,6 +62,16 @@ bool find(std::string &value) {
   return false;
 }
 
+Type findType(std::string &word) {
+    Function *f = get_function();
+    for(int i=0; i < f->declarations.size(); i++) {
+        Symbol *s = &f->declarations[i];
+        if (s->name == word) {
+            return s->type;
+        }
+  }
+}
+
 void add_function_to_symbol_table(std::string &value) {
   Function f; 
   f.name = value; 
@@ -369,6 +379,11 @@ assignment: IDENTIFIER ASSIGNMENT expression {
             std::string err = std::string(ident) + std::string(" Variable used without being declared");
             yyerror(err.c_str());
         }
+        Type t = Integer;
+        if(findType(ident) != t) {
+            std::string err = std::string(ident) + std::string(" Variable is a array not an int");
+            yyerror(err.c_str());
+        } 
         $$ = node;
     }
     | declaration ASSIGNMENT expression {
@@ -395,6 +410,12 @@ assignment: IDENTIFIER ASSIGNMENT expression {
             std::string err = std::string(ident) + std::string(" Variable used without being declared");
             yyerror(err.c_str());
         }
+        // data type check
+        Type t = Array;
+        if(findType(ident) != t) {
+            std::string err = std::string(ident) + std::string(" Variable is a int not an array");
+            yyerror(err.c_str());
+        } 
         $$ = node;
     }
     ;
@@ -403,10 +424,17 @@ io: OUTPUT IDENTIFIER {
         CodeNode *node = new CodeNode;
         std::string ident = $2;
         node->code = std::string(".> ") + std::string($2);
+        // decl check
         if(!find(ident)) {
             std::string err = std::string(ident) + std::string(" Variable used without being declared");
             yyerror(err.c_str());
         }
+        // data type check
+        Type t = Integer;
+        if(findType(ident) != t) {
+            std::string err = std::string(ident) + std::string(" Variable is an array not an int");
+            yyerror(err.c_str());
+        } 
         $$ = node;
     }
     // array outputs
@@ -425,6 +453,11 @@ io: OUTPUT IDENTIFIER {
             std::string err = std::string(ident) + std::string(" Variable used without being declared");
             yyerror(err.c_str());
         }
+        Type t = Array;
+        if(findType(ident) != t) {
+            std::string err = std::string(ident) + std::string(" Variable is an int not an array");
+            yyerror(err.c_str());
+        } 
         $$ = node;
     }
     | INPUT IDENTIFIER {}
@@ -495,6 +528,11 @@ factor: STARTPAREN expression CLOSEPAREN {
             std::string err = node -> name + std::string(" Variable used without being declared");
             yyerror(err.c_str());
         }
+        Type t = Integer;
+        if(findType(node -> name) != t) {
+            std::string err = node -> name + std::string(" Variable is an array not an int");
+            yyerror(err.c_str());
+        } 
         $$ = node;
     }
     | function_call {
@@ -510,6 +548,15 @@ factor: STARTPAREN expression CLOSEPAREN {
         node -> code = std::string(". ") + temp + std::string("\n");
         // accessing memory
         node -> code += std::string("=[] ") + temp + std::string(", ") + ident + std::string(", ") + mem + std::string("\n");
+        if(!find(ident)){
+            std::string err = node -> name + std::string(" Variable used without being declared");
+            yyerror(err.c_str());
+        }
+        Type t = Array;
+        if(findType(ident) != t) {
+            std::string err = std::string(ident) + std::string(" Variable is an int not an array");
+            yyerror(err.c_str());
+        } 
 
         $$ = node;
     }
