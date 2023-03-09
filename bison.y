@@ -29,6 +29,15 @@ Function *get_function() {
   return &symbol_table[last];
 }
 
+bool findMain() {
+    for(int i = 0; i < symbol_table.size(); i++) {
+        if(symbol_table[i].name == std::string("main")) {
+            return true;
+        }
+    }
+    return false;
+}
+
 bool find(std::string &value) {
   Function *f = get_function();
   for(int i=0; i < f->declarations.size(); i++) {
@@ -113,11 +122,13 @@ std::string returnArgument(){
 %type <code_node> function_call_args
 %type <code_node> funcIdent
 %%
-prog_start: %empty /* epsilon */ {}
+prog_start: %empty /* epsilon */ {yyerror("Main was not declared");}
     | functions {
         CodeNode *code_node = $1;
-        // seg faulting on print statement...idk why. Might be because I havent
         // finished implementing function rule
+        if(!findMain()) {
+            yyerror("Main was not declared");
+        }
         printf("%s\n", code_node -> code.c_str());
     }
     ;
