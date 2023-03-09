@@ -1,4 +1,8 @@
+fonction math(ent a){
+    ent b -> 10 + c;
+}
+
 fonction main(){
     ent a;
-    b[2] -> 10;
+    # math(2);
 }

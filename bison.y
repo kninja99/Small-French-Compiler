@@ -192,11 +192,13 @@ arg: INTEGER IDENTIFIER {
         node -> code = std::string(". ") + $2 + std::string("\n");
         // assignment
         node -> code += std::string("= ") + $2 + std::string(", ") +returnArgument() + std::string("\n");
+        Type t = Integer;
+        add_variable_to_symbol_table(node -> name,t);
         $$ = node;
     }
-    | expression {
+    /* | expression {
         $$ = $1;
-    }
+    } */
     ;
 
 statements: %empty /* epsilon */ {
@@ -268,6 +270,7 @@ declaration: INTEGER IDENTIFIER {
 function_call: IDENTIFIER STARTPAREN function_call_args CLOSEPAREN {
         CodeNode *node = new CodeNode;
         CodeNode *args = $3;
+        std::string ident = $1;
         std::string temp = returnTempVarName();
         node -> name = temp;
         // construct params
@@ -275,6 +278,9 @@ function_call: IDENTIFIER STARTPAREN function_call_args CLOSEPAREN {
         // make temp var and store
         node -> code += std::string(". ") + temp + std::string("\n");
         node -> code += std::string("call ") + $1 + std::string(", ") + temp + std::string("\n");
+        if(!find(ident)) {
+            yyerror("function has not been defined");
+        }
         $$ = node; 
     }
     ;
