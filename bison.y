@@ -4,6 +4,7 @@
 #include <string.h>
 #include "CodeNode.h"
 #include <vector>
+#include <iostream>
 extern FILE* yyin;
 extern int lineNum;
 extern int charPos;
@@ -22,7 +23,19 @@ struct Function {
 };
 
 std::vector <Function> symbol_table;
+// list of reserved word
+std::string keyWords[] = {"sortir","contribution","faire", "tandis", "revenir", "fonction","autre", "si", "true","false", "ent"};
 
+std::vector <std::string> tokenList(keyWords, keyWords + 11);
+
+bool findReserveWord(std::string word) {
+    for(int i = 0; i < tokenList.size(); i++) {
+        if(tokenList[i] == word) {
+            return true;
+        }
+    }
+    return false;
+}
 
 Function *get_function() {
   int last = symbol_table.size()-1;
@@ -152,6 +165,10 @@ funcIdent: FUNCTION IDENTIFIER{
     CodeNode *node = new CodeNode;
     std::string val = $2;
     node -> name = val;
+    if(findReserveWord(val)) {
+        std::string err = std::string(val) + std::string(" can not be named as a reserved word");
+        yyerror(err.c_str());
+    }
     add_function_to_symbol_table(val);
     $$ = node;
 }
@@ -204,6 +221,10 @@ arg: INTEGER IDENTIFIER {
         // assignment
         node -> code += std::string("= ") + $2 + std::string(", ") +returnArgument() + std::string("\n");
         Type t = Integer;
+        if(findReserveWord(node -> name)) {
+            std::string err = node -> name + std::string(" can not be named as a reserved word");
+            yyerror(err.c_str());
+        }   
         add_variable_to_symbol_table(node -> name,t);
         $$ = node;
     }
@@ -260,6 +281,10 @@ declaration: INTEGER IDENTIFIER {
         std::string ident = $2;
         node -> code = std::string(". ") + $2;
         node -> name = ident;
+        if(findReserveWord(ident)) {
+            std::string err = ident + std::string(" can not be named as a reserved word");
+            yyerror(err.c_str());
+        }
 
         if(find(ident)) {
             std::string err = std::string(ident) + std::string(" Symbol already declared");
@@ -277,6 +302,11 @@ declaration: INTEGER IDENTIFIER {
         std::string size = $4;
         Type t = Array;
         node -> code = std::string(".[] " + ident + std::string(", ") + size);
+
+        if(findReserveWord(ident)) {
+            std::string err = ident + std::string(" can not be named as a reserved word");
+            yyerror(err.c_str());
+        }
 
         if(find(ident)) {
             std::string err = std::string(ident) + std::string(" Symbol already declared");
