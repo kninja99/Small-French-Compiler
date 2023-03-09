@@ -1,6 +1,6 @@
 %{
 #include <stdio.h>
-#include "y.tab.h"
+#include "bison.tab.h"
 int lineNum = 1;
 int charPos = 0;
 %}
@@ -17,6 +17,7 @@ ADD [+]
 SUBTRACT "-"
 DIVIDE "/"
 MULTIPLICATION "*"
+MOD "%"
 ASSIGNMENT "->"
 LESSTHAN   "<"
 GREATERTHAN ">"
@@ -39,10 +40,19 @@ IDENTIFIER [a-zA-Z]+[a-zA-Z0-9]*
 INVALID [0-9]+[a-zA-Z0-9]+
 NEWLINE \n
 COMMA ,
+STARTBRACE "["
+ENDBRACE "]"
 
 %%
+{STARTBRACE} {charPos+=yyleng; return STARTBRACE;}
+{ENDBRACE} {charPos+=yyleng; return ENDBRACE;}
 {COMMA} {charPos+=yyleng; return COMMA;}
-{NUMBER} {charPos+=yyleng; return NUMBER;}
+{NUMBER} {
+    charPos+=yyleng;
+    char * token = new char[yyleng];
+    strcpy(token, yytext);
+    yylval.op_val = token;
+    return NUMBER;}
 {STARTBRACKET} {charPos+=yyleng; return STARTBRACKET;}
 {CLOSEBRACKET} {charPos+=yyleng; return CLOSEBRACKET;}
 {STARTPAREN} {charPos+=yyleng; return STARTPAREN;}
@@ -52,6 +62,7 @@ COMMA ,
 {SUBTRACT} {charPos+=yyleng; return SUBTRACT;}
 {DIVIDE} {charPos+=yyleng; return DIVIDE;} 
 {MULTIPLICATION} {charPos+=yyleng; return MULTIPLICATION;} 
+{MOD} {charPos+=yyleng; return MOD;}
 {ASSIGNMENT} {charPos+=yyleng; return ASSIGNMENT;}
 {LESSTHAN}   {charPos+=yyleng; return LESSTHAN;}
 {GREATERTHAN} {charPos+=yyleng; return GREATERTHAN;}
@@ -71,7 +82,12 @@ COMMA ,
 {SPACE} {}
 {TRUE} {charPos+=yyleng; return TRUE;}
 {FALSE} {charPos+=yyleng; return FALSE;}
-{IDENTIFIER} {charPos+=yyleng; return IDENTIFIER;}
+{IDENTIFIER} {
+    charPos+=yyleng; 
+    char * token = new char[yyleng];
+    strcpy(token, yytext);
+    yylval.op_val = token;
+    return IDENTIFIER;}
 {COMMENT} {}
 {NEWLINE} {++lineNum; charPos = 0;}
 {INVALID} {printf("ERROR at line %d pos %d in %s\n",lineNum,charPos,yytext);}

@@ -1,0 +1,23 @@
+fonction add(ent a, ent b){
+    revenir a + b; 
+}
+
+fonction mult(ent a, ent b){
+    revenir a * b; 
+}
+
+fonction main(){
+    ent a;
+    ent b;
+    ent c;
+    ent d;
+
+    a -> 100;
+    b -> 50;
+    c -> add(a,b);
+
+    sortir << c;
+
+    d -> mult(c, a + b);
+    sortir << d;
+}
