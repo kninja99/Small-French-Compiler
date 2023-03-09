@@ -1,16 +1,16 @@
-# This is a nested loop 
-fonction main(){
-    ent i;
-    ent j;
+# This is an if-else statement
+fonction main() {
+    ent a;
+    ent b;
+    ent c;
 
-    i -> 0;
+    a -> 100;
+    b -> 50;
 
-    tandis(i < 2){
-        j -> 1;
-        tandis( j <= 3){
-            sortir << j;
-            j -> j+1;
-        }
-        i -> i + 1;
+    si(a < b){
+        c -> b;
+    }
+    autre{
+        c -> a;
     }
 }
