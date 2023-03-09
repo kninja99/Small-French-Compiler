@@ -257,7 +257,10 @@ declaration: INTEGER IDENTIFIER {
         CodeNode *node = new CodeNode;
         std::string ident = $2;
         std::string size = $4;
+        Type t = Array;
         node -> code = std::string(".[] " + ident + std::string(", ") + size);
+
+        add_variable_to_symbol_table(ident,t);
         $$ = node;
     }
     ;
@@ -304,7 +307,9 @@ assignment: IDENTIFIER ASSIGNMENT expression {
         CodeNode *expression = $3;
         node->code = $3->code;
         node -> code += std::string("= ") + ident + std::string(", ") + expression -> name;
-
+        if(!find(ident)) {
+            yyerror("Variable used without being declared");
+        }
         $$ = node;
     }
     | declaration ASSIGNMENT expression {
@@ -327,16 +332,23 @@ assignment: IDENTIFIER ASSIGNMENT expression {
         node -> code = expression -> code;
         node -> code += std::string("[]= ") + ident + std::string(", ") + mem;
         node -> code += std::string(", ") + expression -> name;
-
+        if(!find(ident)) {
+            yyerror("Variable used without being declared");
+        }
         $$ = node;
     }
     ;
 
 io: OUTPUT IDENTIFIER {
         CodeNode *node = new CodeNode;
+        std::string ident = $2;
         node->code = std::string(".> ") + std::string($2);
+        if(!find(ident)) {
+            yyerror("Variable used without being declared");
+        }
         $$ = node;
     }
+    // array outputs
     | OUTPUT IDENTIFIER STARTBRACE NUMBER ENDBRACE {
         CodeNode *node = new CodeNode;
         std::string tempVar = returnTempVarName();
@@ -348,6 +360,9 @@ io: OUTPUT IDENTIFIER {
         node -> code += std::string(", ") + mem + std::string("\n");
         // print statement
         node -> code += std::string(".> ") + tempVar;
+        if(!find(ident)) {
+            yyerror("Variable used without being declared");
+        }
         $$ = node;
     }
     | INPUT IDENTIFIER {}
@@ -365,11 +380,6 @@ expression: expression addop term {
         CodeNode *node = $1;
         $$ = node;
     }
-    | STARTBRACKET arraynumbers CLOSEBRACKET {}
-    ;
-arraynumbers: NUMBER {}
-    | NUMBER COMMA arraynumbers {}
-    | %empty /* epsilon */ {}
     ;
 
 addop: ADD {
@@ -419,6 +429,9 @@ factor: STARTPAREN expression CLOSEPAREN {
     | IDENTIFIER {
         CodeNode *node = new CodeNode;
         node -> name = $1;
+        if(!find(node -> name)){
+            yyerror("Variable used without being declared");
+        }
         $$ = node;
     }
     | function_call {

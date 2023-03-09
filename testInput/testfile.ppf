@@ -1,3 +1,4 @@
 fonction main(){
     ent a;
+    b[2] -> 10;
 }
