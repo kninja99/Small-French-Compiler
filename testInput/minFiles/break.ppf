@@ -1,0 +1,14 @@
+# This is a simple loop with a break statement
+fonction main(){
+    ent i;
+
+    i -> 0;
+
+    tandis(i <= 10){
+        sortir << i;
+        si( i > 2){
+            break;
+        }
+        i -> i + 1;
+    }
+}
