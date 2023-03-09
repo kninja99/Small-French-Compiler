@@ -111,6 +111,7 @@ std::string returnArgument(){
 %type <op_val> multop
 %type <code_node> function_call
 %type <code_node> function_call_args
+%type <code_node> funcIdent
 %%
 prog_start: %empty /* epsilon */ {}
     | functions {
@@ -136,16 +137,24 @@ functions: function {
         $$ = node;
     }
     ;
-
-function: FUNCTION IDENTIFIER STARTPAREN args CLOSEPAREN STARTBRACKET statements CLOSEBRACKET {
+funcIdent: FUNCTION IDENTIFIER{
     CodeNode *node = new CodeNode;
-    CodeNode *statements = $7;
-    std::string func_name = $2;
+    std::string val = $2;
+    node -> name = val;
+    add_function_to_symbol_table(val);
+    $$ = node;
+}
+
+function: funcIdent STARTPAREN args CLOSEPAREN STARTBRACKET statements CLOSEBRACKET {
+    CodeNode *node = new CodeNode;
+    CodeNode *statements = $6;
+    std::string func_name = $1 -> name;
     node -> code = "";
+
     // add the "func IDENTIFIER"
     node -> code += std::string("func ") + func_name + std::string("\n");
     // args
-    node -> code += $4 -> code;
+    node -> code += $3 -> code;
     // statements
     node -> code += statements->code;
 
@@ -238,6 +247,9 @@ declaration: INTEGER IDENTIFIER {
         std::string ident = $2;
         node -> code = std::string(". ") + $2;
         node -> name = ident;
+
+        add_variable_to_symbol_table(ident,t);
+
         $$ = node;
     }
     // for array declaration 
