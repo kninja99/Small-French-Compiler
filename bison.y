@@ -322,7 +322,11 @@ declaration: INTEGER IDENTIFIER {
             std::string err = std::string(ident) + std::string(" Symbol already declared");
             yyerror(err.c_str());
         }
-
+        // size check
+        if(std::stoi(size) <= 0) {
+            std::string err = std::string(ident) + std::string(" array size has to be declared as a size greater than 0");
+            yyerror(err.c_str());
+        }
         add_variable_to_symbol_table(ident,t);
         $$ = node;
     }

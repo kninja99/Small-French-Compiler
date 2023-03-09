@@ -1,5 +1,3 @@
 fonction main(){
-    ent b;
     ent arr[10];
-    arr -> 10;
 }
