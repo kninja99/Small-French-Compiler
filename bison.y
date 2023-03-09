@@ -29,9 +29,9 @@ Function *get_function() {
   return &symbol_table[last];
 }
 
-bool findMain() {
+bool findFunction(std::string func) {
     for(int i = 0; i < symbol_table.size(); i++) {
-        if(symbol_table[i].name == std::string("main")) {
+        if(symbol_table[i].name == func) {
             return true;
         }
     }
@@ -126,7 +126,7 @@ prog_start: %empty /* epsilon */ {yyerror("Main was not declared");}
     | functions {
         CodeNode *code_node = $1;
         // finished implementing function rule
-        if(!findMain()) {
+        if(!findFunction(std::string("main"))) {
             yyerror("Main was not declared");
         }
         printf("%s\n", code_node -> code.c_str());
@@ -261,6 +261,11 @@ declaration: INTEGER IDENTIFIER {
         node -> code = std::string(". ") + $2;
         node -> name = ident;
 
+        if(find(ident)) {
+            std::string err = std::string(ident) + std::string(" Symbol already declared");
+            yyerror(err.c_str());
+        }
+
         add_variable_to_symbol_table(ident,t);
 
         $$ = node;
@@ -272,6 +277,11 @@ declaration: INTEGER IDENTIFIER {
         std::string size = $4;
         Type t = Array;
         node -> code = std::string(".[] " + ident + std::string(", ") + size);
+
+        if(find(ident)) {
+            std::string err = std::string(ident) + std::string(" Symbol already declared");
+            yyerror(err.c_str());
+        }
 
         add_variable_to_symbol_table(ident,t);
         $$ = node;
@@ -289,8 +299,9 @@ function_call: IDENTIFIER STARTPAREN function_call_args CLOSEPAREN {
         // make temp var and store
         node -> code += std::string(". ") + temp + std::string("\n");
         node -> code += std::string("call ") + $1 + std::string(", ") + temp + std::string("\n");
-        if(!find(ident)) {
-            yyerror("function has not been defined");
+        if(!findFunction(ident)) {
+            std::string err = std::string(ident) + std::string(" function has not been defined");
+            yyerror(err.c_str());
         }
         $$ = node; 
     }
@@ -325,7 +336,8 @@ assignment: IDENTIFIER ASSIGNMENT expression {
         node->code = $3->code;
         node -> code += std::string("= ") + ident + std::string(", ") + expression -> name;
         if(!find(ident)) {
-            yyerror("Variable used without being declared");
+            std::string err = std::string(ident) + std::string(" Variable used without being declared");
+            yyerror(err.c_str());
         }
         $$ = node;
     }
@@ -350,7 +362,8 @@ assignment: IDENTIFIER ASSIGNMENT expression {
         node -> code += std::string("[]= ") + ident + std::string(", ") + mem;
         node -> code += std::string(", ") + expression -> name;
         if(!find(ident)) {
-            yyerror("Variable used without being declared");
+            std::string err = std::string(ident) + std::string(" Variable used without being declared");
+            yyerror(err.c_str());
         }
         $$ = node;
     }
@@ -361,7 +374,8 @@ io: OUTPUT IDENTIFIER {
         std::string ident = $2;
         node->code = std::string(".> ") + std::string($2);
         if(!find(ident)) {
-            yyerror("Variable used without being declared");
+            std::string err = std::string(ident) + std::string(" Variable used without being declared");
+            yyerror(err.c_str());
         }
         $$ = node;
     }
@@ -378,7 +392,8 @@ io: OUTPUT IDENTIFIER {
         // print statement
         node -> code += std::string(".> ") + tempVar;
         if(!find(ident)) {
-            yyerror("Variable used without being declared");
+            std::string err = std::string(ident) + std::string(" Variable used without being declared");
+            yyerror(err.c_str());
         }
         $$ = node;
     }
@@ -447,7 +462,8 @@ factor: STARTPAREN expression CLOSEPAREN {
         CodeNode *node = new CodeNode;
         node -> name = $1;
         if(!find(node -> name)){
-            yyerror("Variable used without being declared");
+            std::string err = node -> name + std::string(" Variable used without being declared");
+            yyerror(err.c_str());
         }
         $$ = node;
     }
