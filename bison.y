@@ -123,7 +123,7 @@ std::string returnArgument(){
   struct CodeNode *code_node;
   char *op_val;
 }
-%token STARTBRACKET CLOSEBRACKET STARTPAREN CLOSEPAREN INTEGER ADD SUBTRACT DIVIDE MULTIPLICATION MOD ASSIGNMENT LESSTHAN GREATERTHAN EQUAL NOTEQUAL LESSTHANEQUAL GREATERTHANEQUAL OUTPUT INPUT DO WHILE RETURN FUNCTION ELSE IF ENDLINE TRUE FALSE COMMA ARRAY STARTBRACE ENDBRACE
+%token STARTBRACKET CLOSEBRACKET STARTPAREN CLOSEPAREN INTEGER ADD SUBTRACT DIVIDE MULTIPLICATION MOD ASSIGNMENT LESSTHAN GREATERTHAN EQUAL NOTEQUAL LESSTHANEQUAL GREATERTHANEQUAL OUTPUT INPUT DO WHILE RETURN FUNCTION ELSE IF ENDLINE TRUE FALSE COMMA STARTBRACE ENDBRACE
 %token <op_val> NUMBER 
 %token <op_val> IDENTIFIER
 %type <code_node> functions
@@ -139,6 +139,9 @@ std::string returnArgument(){
 %type <code_node> return
 %type <code_node> args
 %type <code_node> arg
+%type <code_node> whileloop
+%type <code_node> boolean
+%type <op_val> boolop
 %type <op_val> addop
 %type <op_val> multop
 %type <code_node> function_call
@@ -257,7 +260,14 @@ statements: %empty /* epsilon */ {
         $$ = node;
     }
     | conditionals statements {}
-    | whileloop statements {}
+    | whileloop statements {
+        CodeNode *node = new CodeNode;
+        CodeNode *loop = $1;
+        CodeNode *statement = $2;
+
+        node -> code = loop -> code + statement -> code;
+        $$ = node;
+    }
     | dowhile statements {}
     ;
 
@@ -575,18 +585,55 @@ condition: %empty /* epsilon */ {}
 
 boolean: TRUE  {}
     | FALSE {}
-    | expression boolop expression {}
+    | expression boolop expression {
+        CodeNode *node = new CodeNode;
+        std::string boolop = $2;
+        std::string temp = returnTempVarName();
+        CodeNode *exp1 = $1;
+        CodeNode *exp2 = $3;
+        node -> name = temp;
+        node -> code = std::string(". ") + temp + std::string("\n");
+        node ->code += boolop + std::string(" ") + temp + std::string(", ") + exp1 -> name;
+        node -> code += std::string(", ") + exp2 -> name + std::string("\n");
+
+        $$ = node;
+    }
     ;
 
-boolop: EQUAL {}
-    | LESSTHAN  {}
-    | LESSTHANEQUAL {}
-    | GREATERTHAN   {}
-    | GREATERTHANEQUAL  {}
-    | NOTEQUAL  {}
+boolop: EQUAL {
+        char op[] = "==";
+        $$ = op;
+    }
+    | LESSTHAN  {
+        char op[] = "<";
+        $$ = op;
+    }
+    | LESSTHANEQUAL {
+        char op[] = "<=";
+        $$ = op;
+    }
+    | GREATERTHAN   {
+        char op[] = ">";
+        $$ = op;
+    }
+    | GREATERTHANEQUAL  {
+        char op[] = ">=";
+        $$ = op;
+    }
+    | NOTEQUAL  {
+        char op[] = "!=";
+        $$ = op;
+    }
     ;
 
-whileloop: WHILE STARTPAREN boolean CLOSEPAREN STARTBRACKET statements CLOSEBRACKET {}
+whileloop: WHILE STARTPAREN boolean CLOSEPAREN STARTBRACKET statements CLOSEBRACKET {
+    CodeNode *node = new CodeNode;
+    CodeNode *truth = $3;
+    node -> code = std::string(": beginloop\n");
+    node -> code += truth -> code;
+    node -> code += std::string(":= endloop\n");
+    $$ = node;
+}
 
 dowhile: DO STARTBRACKET statements CLOSEBRACKET WHILE STARTPAREN boolean CLOSEPAREN ENDLINE {}
     ;
