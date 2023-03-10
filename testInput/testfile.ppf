@@ -3,6 +3,7 @@ fonction main(){
     ent i;
     i -> 0;
     tandis(i < 10){
-       
+        i -> i + 1;
+        sortir << i ;
     }
 }

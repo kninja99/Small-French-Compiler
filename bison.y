@@ -629,9 +629,19 @@ boolop: EQUAL {
 whileloop: WHILE STARTPAREN boolean CLOSEPAREN STARTBRACKET statements CLOSEBRACKET {
     CodeNode *node = new CodeNode;
     CodeNode *truth = $3;
-    node -> code = std::string(": beginloop\n");
+    CodeNode *statement = $6;
+    std::string loopBody = std::string("loopbody");
+    std::string beginLoop = std::string("beginloop");
+    std::string endLoop = std::string("endloop");
+    node -> code = std::string(": ") + beginLoop + std::string("\n");
     node -> code += truth -> code;
-    node -> code += std::string(":= endloop\n");
+    node -> code += std::string("?:= ") + loopBody + std::string(", ") + truth -> name + std::string("\n");
+    node -> code += std::string(":= ") + endLoop + std::string("\n");
+    // loop body
+    node -> code += std::string(": ") + loopBody + std::string("\n");
+    node -> code += statement -> code;
+    node -> code += std::string(":= ") + beginLoop + std::string("\n");
+    node -> code += std::string(": ") + endLoop + std::string("\n");
     $$ = node;
 }
 
