@@ -9,6 +9,7 @@ extern FILE* yyin;
 extern int lineNum;
 extern int charPos;
 int argCount = 0;
+int loopCount = 0;
 extern int yylex(void);
 void yyerror(const char *msg);
 
@@ -109,11 +110,15 @@ std::string returnTempVarName(){
 }
 
 std::string returnLoopCount() {
-    static int loopCount = 0;
     int curr_count = loopCount;
     loopCount++;
 
     return std::to_string(curr_count);
+}
+
+std::string getCurrLoop() {
+    int curr_loop = loopCount;
+    return std::to_string(curr_loop);
 }
 
 std::string returnIfCount() {
@@ -139,9 +144,10 @@ std::string returnArgument(){
   struct CodeNode *code_node;
   char *op_val;
 }
-%token STARTBRACKET CLOSEBRACKET STARTPAREN CLOSEPAREN INTEGER ADD SUBTRACT DIVIDE MULTIPLICATION MOD ASSIGNMENT LESSTHAN GREATERTHAN EQUAL NOTEQUAL LESSTHANEQUAL GREATERTHANEQUAL OUTPUT INPUT DO WHILE RETURN FUNCTION ELSE IF ENDLINE TRUE FALSE COMMA STARTBRACE ENDBRACE BREAK
+%token STARTBRACKET CLOSEBRACKET STARTPAREN CLOSEPAREN INTEGER ADD SUBTRACT DIVIDE MULTIPLICATION MOD ASSIGNMENT LESSTHAN GREATERTHAN EQUAL NOTEQUAL LESSTHANEQUAL GREATERTHANEQUAL OUTPUT INPUT DO WHILE RETURN FUNCTION ELSE IF ENDLINE TRUE FALSE COMMA STARTBRACE ENDBRACE
 %token <op_val> NUMBER 
 %token <op_val> IDENTIFIER
+%token <op_val> BREAK
 %type <code_node> functions
 %type <code_node> function
 %type <code_node> statements
@@ -310,6 +316,12 @@ statement: declaration {
     }
     | io {
         CodeNode *node = $1;
+        $$ = node;
+    }
+    | BREAK {
+        CodeNode *node = new CodeNode;
+        std::string loopCount = getCurrLoop();
+        node -> code = std::string(":= endloop" + loopCount);
         $$ = node;
     }
     | return {

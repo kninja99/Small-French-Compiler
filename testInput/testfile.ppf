@@ -1,17 +1,14 @@
-fonction main() {
-    ent a;
-    ent b;
-    ent c;
+# This is a simple loop with a break statement
+fonction main(){
+    ent i;
 
-    a -> 100;
-    b -> 50;
+    i -> 0;
 
-    si(a < b){
-        c -> b;
+    tandis(i <= 10){
+        sortir << i;
+        si( i > 2){
+            break;
+        }
+        i -> i + 1;
     }
-    autre{
-        c -> a;
-    }
-    
-    sortir << c;
 }
