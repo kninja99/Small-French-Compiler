@@ -116,6 +116,14 @@ std::string returnLoopCount() {
     return std::to_string(curr_count);
 }
 
+std::string returnIfCount() {
+    static int ifCount = 0;
+    int curr_count = ifCount;
+    ifCount++;
+
+    return std::to_string(curr_count);
+}
+
 std::string returnArgument(){
     std::string argName("$");
     char strCount[2];
@@ -597,28 +605,29 @@ conditionals: IF STARTPAREN boolean CLOSEPAREN STARTBRACKET statements CLOSEBRAC
         CodeNode *boolOp = $3;
         CodeNode *statement = $6;
         CodeNode *elseCondition = $8;
-        std::string ifTrue = std::string("if_true");
+        std::string ifCount = returnIfCount();
+        std::string ifTrue = std::string("if_true" + ifCount);
         node -> code = boolOp -> code;
         node -> code += std::string("?:= " + ifTrue + ", " + boolOp->name + "\n");
         // could need a conditional check
         if(elseCondition != NULL) {
-            node -> code += std::string(":= " + elseCondition -> name + "\n");
+            node -> code += std::string(":= " + elseCondition -> name + ifCount + "\n");
         }
         else {
-            node -> code += std::string(":= " + std::string("endif") + "\n");
+            node -> code += std::string(":= " + std::string("endif" + ifCount) + "\n");
         }
         // ---> if statement
         node -> code += std::string(": " + ifTrue + "\n");
         node -> code += statement -> code;
         if(elseCondition == NULL) {
-            node -> code += std::string(": " + std::string("endif") + "\n");
+            node -> code += std::string(": " + std::string("endif")+ ifCount + "\n");
         }
         // else statement
         if(elseCondition != NULL) {
-            node -> code += std::string(":= " + std::string("endif") + "\n");
-            node -> code += std::string(": " + elseCondition -> name + "\n");
+            node -> code += std::string(":= " + std::string("endif"+ ifCount) + "\n");
+            node -> code += std::string(": " + elseCondition -> name + ifCount + "\n");
             node -> code += elseCondition -> code;
-            node -> code += std::string(": " + std::string("endif") + "\n");
+            node -> code += std::string(": " + std::string("endif" + ifCount) + "\n");
         }
         $$ = node;
     }
