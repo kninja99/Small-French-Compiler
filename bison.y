@@ -155,6 +155,8 @@ std::string returnArgument(){
 %type <code_node> function_call
 %type <code_node> function_call_args
 %type <code_node> funcIdent
+%type <code_node> conditionals
+%type <code_node> condition
 %%
 prog_start: %empty /* epsilon */ {yyerror("Main was not declared");}
     | functions {
@@ -584,11 +586,42 @@ factor: STARTPAREN expression CLOSEPAREN {
     }
     ;
 
-conditionals: IF STARTPAREN boolean CLOSEPAREN STARTBRACKET statements CLOSEBRACKET condition {}
+conditionals: IF STARTPAREN boolean CLOSEPAREN STARTBRACKET statements CLOSEBRACKET condition {
+        CodeNode *node = new CodeNode;
+        CodeNode *boolOp = $3;
+        CodeNode *statement = $6;
+        CodeNode *elseCondition = $8;
+        std::string ifTrue = std::string("if_true");
+        node -> code = boolOp -> code;
+        node -> code += std::string("?:= " + ifTrue + ", " + boolOp->name + "\n");
+        // could need a conditional check
+        node -> code += std::string(":= " + elseCondition -> name + "\n");
+        // ---> if statement
+        node -> code += std::string(": " + ifTrue + "\n");
+        node -> code += statement -> code;
+        // else statement
+        node -> code += std::string(":= " + std::string("endif") + "\n");
+        node -> code += std::string(": " + elseCondition -> name + "\n");
+        node -> code += elseCondition -> code;
+        node -> code += std::string("= " + std::string("endif") + "\n");
+        $$ = node;
+    }
     ;
 
-condition: %empty /* epsilon */ {}
-    | ELSE STARTBRACKET statements CLOSEBRACKET {}
+condition: %empty /* epsilon */ {
+        CodeNode *node = new CodeNode;
+        node -> code = std::string("");
+        node ->name = std::string("");
+        $$ = node;
+    }
+    | ELSE STARTBRACKET statements CLOSEBRACKET {
+        CodeNode *node = new CodeNode;
+        CodeNode *statement = $3;
+        std::string elseName = std::string("else");
+        node -> name = elseName;
+        node -> code = statement -> code;
+        $$ = node;
+    }
     ;
 
 boolean: TRUE  {}
