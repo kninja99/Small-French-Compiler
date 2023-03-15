@@ -269,7 +269,13 @@ statements: %empty /* epsilon */ {
         node -> code = statement ->code + std::string("\n") + statements -> code;
         $$ = node;
     }
-    | conditionals statements {}
+    | conditionals statements {
+        CodeNode *node = new CodeNode;
+        CodeNode *condition = $1;
+        CodeNode *statement = $2;
+        node -> code = condition -> code + statement -> code;
+        $$ = node;
+    }
     | whileloop statements {
         CodeNode *node = new CodeNode;
         CodeNode *loop = $1;
@@ -595,24 +601,32 @@ conditionals: IF STARTPAREN boolean CLOSEPAREN STARTBRACKET statements CLOSEBRAC
         node -> code = boolOp -> code;
         node -> code += std::string("?:= " + ifTrue + ", " + boolOp->name + "\n");
         // could need a conditional check
-        node -> code += std::string(":= " + elseCondition -> name + "\n");
+        if(elseCondition != NULL) {
+            node -> code += std::string(":= " + elseCondition -> name + "\n");
+        }
+        else {
+            node -> code += std::string(":= " + std::string("endif") + "\n");
+        }
         // ---> if statement
         node -> code += std::string(": " + ifTrue + "\n");
         node -> code += statement -> code;
+        if(elseCondition == NULL) {
+            node -> code += std::string(": " + std::string("endif") + "\n");
+        }
         // else statement
-        node -> code += std::string(":= " + std::string("endif") + "\n");
-        node -> code += std::string(": " + elseCondition -> name + "\n");
-        node -> code += elseCondition -> code;
-        node -> code += std::string("= " + std::string("endif") + "\n");
+        if(elseCondition != NULL) {
+            node -> code += std::string(":= " + std::string("endif") + "\n");
+            node -> code += std::string(": " + elseCondition -> name + "\n");
+            node -> code += elseCondition -> code;
+            node -> code += std::string(": " + std::string("endif") + "\n");
+        }
         $$ = node;
     }
     ;
 
 condition: %empty /* epsilon */ {
         CodeNode *node = new CodeNode;
-        node -> code = std::string("");
-        node ->name = std::string("");
-        $$ = node;
+        $$ = NULL;
     }
     | ELSE STARTBRACKET statements CLOSEBRACKET {
         CodeNode *node = new CodeNode;

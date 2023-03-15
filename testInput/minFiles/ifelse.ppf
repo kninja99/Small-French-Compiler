@@ -13,4 +13,5 @@ fonction main() {
     autre{
         c -> a;
     }
+    sortir << c; 
 }
