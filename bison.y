@@ -108,6 +108,14 @@ std::string returnTempVarName(){
     return varName;
 }
 
+std::string returnLoopCount() {
+    static int loopCount = 0;
+    int curr_count = loopCount;
+    loopCount++;
+
+    return std::to_string(curr_count);
+}
+
 std::string returnArgument(){
     std::string argName("$");
     char strCount[2];
@@ -630,9 +638,10 @@ whileloop: WHILE STARTPAREN boolean CLOSEPAREN STARTBRACKET statements CLOSEBRAC
     CodeNode *node = new CodeNode;
     CodeNode *truth = $3;
     CodeNode *statement = $6;
-    std::string loopBody = std::string("loopbody");
-    std::string beginLoop = std::string("beginloop");
-    std::string endLoop = std::string("endloop");
+    std::string counter = returnLoopCount();
+    std::string loopBody = std::string("loopbody") + counter;
+    std::string beginLoop = std::string("beginloop") + counter;
+    std::string endLoop = std::string("endloop") + counter;
     node -> code = std::string(": ") + beginLoop + std::string("\n");
     node -> code += truth -> code;
     node -> code += std::string("?:= ") + loopBody + std::string(", ") + truth -> name + std::string("\n");
