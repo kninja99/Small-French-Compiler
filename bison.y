@@ -725,7 +725,8 @@ main(int argc, char *argv[]){
     FILE *fp = fopen(argv[1],"r");
     yyin = fp;
     yyparse();
-    print_symbol_table();
+    // uncomment symbol table inorder to view
+    //print_symbol_table();
 }
 int yyerror(char *error) {
     printf("Error at line %d, position %d: %s", lineNum, charPos, error);
