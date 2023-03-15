@@ -33,6 +33,10 @@ array: lex.yy.c bison.tab.c bison.tab.h
 loop: lex.yy.c bison.tab.c bison.tab.h
 	g++ -std=c++11 -o parser bison.tab.c lex.yy.c  -lfl
 	./parser testInput/minFiles/loop.ppf > output.txt
+
+ifelse: lex.yy.c bison.tab.c bison.tab.h
+	g++ -std=c++11 -o parser bison.tab.c lex.yy.c  -lfl
+	./parser testInput/minFiles/ifelse.ppf > output.txt
 	
 test: lex.yy.c bison.tab.c bison.tab.h
 	g++ -std=c++11 -o parser bison.tab.c lex.yy.c  -lfl
