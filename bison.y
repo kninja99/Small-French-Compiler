@@ -9,6 +9,7 @@ extern FILE* yyin;
 extern int lineNum;
 extern int charPos;
 int argCount = 0;
+int loopCount = 0;
 extern int yylex(void);
 void yyerror(const char *msg);
 
@@ -108,6 +109,26 @@ std::string returnTempVarName(){
     return varName;
 }
 
+std::string returnLoopCount() {
+    int curr_count = loopCount;
+    loopCount++;
+
+    return std::to_string(curr_count);
+}
+
+std::string getCurrLoop() {
+    int curr_loop = loopCount;
+    return std::to_string(curr_loop);
+}
+
+std::string returnIfCount() {
+    static int ifCount = 0;
+    int curr_count = ifCount;
+    ifCount++;
+
+    return std::to_string(curr_count);
+}
+
 std::string returnArgument(){
     std::string argName("$");
     char strCount[2];
@@ -123,9 +144,10 @@ std::string returnArgument(){
   struct CodeNode *code_node;
   char *op_val;
 }
-%token STARTBRACKET CLOSEBRACKET STARTPAREN CLOSEPAREN INTEGER ADD SUBTRACT DIVIDE MULTIPLICATION MOD ASSIGNMENT LESSTHAN GREATERTHAN EQUAL NOTEQUAL LESSTHANEQUAL GREATERTHANEQUAL OUTPUT INPUT DO WHILE RETURN FUNCTION ELSE IF ENDLINE TRUE FALSE COMMA ARRAY STARTBRACE ENDBRACE
+%token STARTBRACKET CLOSEBRACKET STARTPAREN CLOSEPAREN INTEGER ADD SUBTRACT DIVIDE MULTIPLICATION MOD ASSIGNMENT LESSTHAN GREATERTHAN EQUAL NOTEQUAL LESSTHANEQUAL GREATERTHANEQUAL OUTPUT INPUT DO WHILE RETURN FUNCTION ELSE IF ENDLINE TRUE FALSE COMMA STARTBRACE ENDBRACE
 %token <op_val> NUMBER 
 %token <op_val> IDENTIFIER
+%token <op_val> BREAK
 %type <code_node> functions
 %type <code_node> function
 %type <code_node> statements
@@ -139,11 +161,16 @@ std::string returnArgument(){
 %type <code_node> return
 %type <code_node> args
 %type <code_node> arg
+%type <code_node> whileloop
+%type <code_node> boolean
+%type <op_val> boolop
 %type <op_val> addop
 %type <op_val> multop
 %type <code_node> function_call
 %type <code_node> function_call_args
 %type <code_node> funcIdent
+%type <code_node> conditionals
+%type <code_node> condition
 %%
 prog_start: %empty /* epsilon */ {yyerror("Main was not declared");}
     | functions {
@@ -256,8 +283,21 @@ statements: %empty /* epsilon */ {
         node -> code = statement ->code + std::string("\n") + statements -> code;
         $$ = node;
     }
-    | conditionals statements {}
-    | whileloop statements {}
+    | conditionals statements {
+        CodeNode *node = new CodeNode;
+        CodeNode *condition = $1;
+        CodeNode *statement = $2;
+        node -> code = condition -> code + statement -> code;
+        $$ = node;
+    }
+    | whileloop statements {
+        CodeNode *node = new CodeNode;
+        CodeNode *loop = $1;
+        CodeNode *statement = $2;
+
+        node -> code = loop -> code + statement -> code;
+        $$ = node;
+    }
     | dowhile statements {}
     ;
 
@@ -276,6 +316,12 @@ statement: declaration {
     }
     | io {
         CodeNode *node = $1;
+        $$ = node;
+    }
+    | BREAK {
+        CodeNode *node = new CodeNode;
+        std::string loopCount = getCurrLoop();
+        node -> code = std::string(":= endloop" + loopCount);
         $$ = node;
     }
     | return {
@@ -566,27 +612,115 @@ factor: STARTPAREN expression CLOSEPAREN {
     }
     ;
 
-conditionals: IF STARTPAREN boolean CLOSEPAREN STARTBRACKET statements CLOSEBRACKET condition {}
+conditionals: IF STARTPAREN boolean CLOSEPAREN STARTBRACKET statements CLOSEBRACKET condition {
+        CodeNode *node = new CodeNode;
+        CodeNode *boolOp = $3;
+        CodeNode *statement = $6;
+        CodeNode *elseCondition = $8;
+        std::string ifCount = returnIfCount();
+        std::string ifTrue = std::string("if_true" + ifCount);
+        node -> code = boolOp -> code;
+        node -> code += std::string("?:= " + ifTrue + ", " + boolOp->name + "\n");
+        // could need a conditional check
+        if(elseCondition != NULL) {
+            node -> code += std::string(":= " + elseCondition -> name + ifCount + "\n");
+        }
+        else {
+            node -> code += std::string(":= " + std::string("endif" + ifCount) + "\n");
+        }
+        // ---> if statement
+        node -> code += std::string(": " + ifTrue + "\n");
+        node -> code += statement -> code;
+        if(elseCondition == NULL) {
+            node -> code += std::string(": " + std::string("endif")+ ifCount + "\n");
+        }
+        // else statement
+        if(elseCondition != NULL) {
+            node -> code += std::string(":= " + std::string("endif"+ ifCount) + "\n");
+            node -> code += std::string(": " + elseCondition -> name + ifCount + "\n");
+            node -> code += elseCondition -> code;
+            node -> code += std::string(": " + std::string("endif" + ifCount) + "\n");
+        }
+        $$ = node;
+    }
     ;
 
-condition: %empty /* epsilon */ {}
-    | ELSE STARTBRACKET statements CLOSEBRACKET {}
+condition: %empty /* epsilon */ {
+        CodeNode *node = new CodeNode;
+        $$ = NULL;
+    }
+    | ELSE STARTBRACKET statements CLOSEBRACKET {
+        CodeNode *node = new CodeNode;
+        CodeNode *statement = $3;
+        std::string elseName = std::string("else");
+        node -> name = elseName;
+        node -> code = statement -> code;
+        $$ = node;
+    }
     ;
 
 boolean: TRUE  {}
     | FALSE {}
-    | expression boolop expression {}
+    | expression boolop expression {
+        CodeNode *node = new CodeNode;
+        std::string boolop = $2;
+        std::string temp = returnTempVarName();
+        CodeNode *exp1 = $1;
+        CodeNode *exp2 = $3;
+        node -> name = temp;
+        node -> code = std::string(". ") + temp + std::string("\n");
+        node ->code += boolop + std::string(" ") + temp + std::string(", ") + exp1 -> name;
+        node -> code += std::string(", ") + exp2 -> name + std::string("\n");
+
+        $$ = node;
+    }
     ;
 
-boolop: EQUAL {}
-    | LESSTHAN  {}
-    | LESSTHANEQUAL {}
-    | GREATERTHAN   {}
-    | GREATERTHANEQUAL  {}
-    | NOTEQUAL  {}
+boolop: EQUAL {
+        char op[] = "==";
+        $$ = op;
+    }
+    | LESSTHAN  {
+        char op[] = "<";
+        $$ = op;
+    }
+    | LESSTHANEQUAL {
+        char op[] = "<=";
+        $$ = op;
+    }
+    | GREATERTHAN   {
+        char op[] = ">";
+        $$ = op;
+    }
+    | GREATERTHANEQUAL  {
+        char op[] = ">=";
+        $$ = op;
+    }
+    | NOTEQUAL  {
+        char op[] = "!=";
+        $$ = op;
+    }
     ;
 
-whileloop: WHILE STARTPAREN boolean CLOSEPAREN STARTBRACKET statements CLOSEBRACKET {}
+whileloop: WHILE STARTPAREN boolean CLOSEPAREN STARTBRACKET statements CLOSEBRACKET {
+    CodeNode *node = new CodeNode;
+    CodeNode *truth = $3;
+    CodeNode *statement = $6;
+    std::string counter = returnLoopCount();
+    std::string loopBody = std::string("loopbody") + counter;
+    std::string beginLoop = std::string("beginloop") + counter;
+    std::string endLoop = std::string("endloop") + counter;
+    node -> code = std::string(": ") + beginLoop + std::string("\n");
+    node -> code += truth -> code;
+    node -> code += std::string("?:= ") + loopBody + std::string(", ") + truth -> name + std::string("\n");
+    node -> code += std::string(":= ") + endLoop + std::string("\n");
+    // loop body
+    node -> code += std::string(": ") + loopBody + std::string("\n");
+    node -> code += statement -> code;
+    node -> code += std::string(":= ") + beginLoop + std::string("\n");
+    node -> code += std::string(": ") + endLoop + std::string("\n");
+    $$ = node;
+}
 
 dowhile: DO STARTBRACKET statements CLOSEBRACKET WHILE STARTPAREN boolean CLOSEPAREN ENDLINE {}
     ;
@@ -603,7 +737,8 @@ main(int argc, char *argv[]){
     FILE *fp = fopen(argv[1],"r");
     yyin = fp;
     yyparse();
-    print_symbol_table();
+    // uncomment symbol table inorder to view
+    //print_symbol_table();
 }
 int yyerror(char *error) {
     printf("Error at line %d, position %d: %s", lineNum, charPos, error);

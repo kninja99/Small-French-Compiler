@@ -1,0 +1,17 @@
+# This is an if-else statement
+fonction main() {
+    ent a;
+    ent b;
+    ent c;
+
+    a -> 100;
+    b -> 50;
+
+    si(a < b){
+        c -> b;
+    }
+    autre{
+        c -> a;
+    }
+    sortir << c; 
+}

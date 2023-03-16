@@ -29,6 +29,22 @@ function: lex.yy.c bison.tab.c bison.tab.h
 array: lex.yy.c bison.tab.c bison.tab.h
 	g++ -std=c++11 -o parser bison.tab.c lex.yy.c  -lfl
 	./parser testInput/minFiles/array.ppf > output.txt
+
+loop: lex.yy.c bison.tab.c bison.tab.h
+	g++ -std=c++11 -o parser bison.tab.c lex.yy.c  -lfl
+	./parser testInput/minFiles/loop.ppf > output.txt
+
+embeddedLoop: lex.yy.c bison.tab.c bison.tab.h
+	g++ -std=c++11 -o parser bison.tab.c lex.yy.c  -lfl
+	./parser testInput/minFiles/nestedLoop.ppf > output.txt
+
+break: lex.yy.c bison.tab.c bison.tab.h
+	g++ -std=c++11 -o parser bison.tab.c lex.yy.c  -lfl
+	./parser testInput/minFiles/break.ppf > output.txt
+
+ifelse: lex.yy.c bison.tab.c bison.tab.h
+	g++ -std=c++11 -o parser bison.tab.c lex.yy.c  -lfl
+	./parser testInput/minFiles/ifelse.ppf > output.txt
 	
 test: lex.yy.c bison.tab.c bison.tab.h
 	g++ -std=c++11 -o parser bison.tab.c lex.yy.c  -lfl

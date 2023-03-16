@@ -1,0 +1,9 @@
+# This is a simple loop that counts from 1 to 10
+fonction main(){
+    ent i;
+    i -> 0;
+    tandis(i < 10){
+        i -> i + 1;
+        sortir << i ;
+    }
+}

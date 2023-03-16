@@ -8,6 +8,7 @@ int charPos = 0;
 NUMBER [0-9]+
 STARTBRACKET [{]
 CLOSEBRACKET [}]
+BREAK "break"
 ENDLINE [;]
 STARTPAREN [(]
 CLOSEPAREN [)]
@@ -55,6 +56,7 @@ ENDBRACE "]"
     return NUMBER;}
 {STARTBRACKET} {charPos+=yyleng; return STARTBRACKET;}
 {CLOSEBRACKET} {charPos+=yyleng; return CLOSEBRACKET;}
+{BREAK} {charPos += yyleng; return BREAK;}
 {STARTPAREN} {charPos+=yyleng; return STARTPAREN;}
 {CLOSEPAREN} {charPos+=yyleng; return CLOSEPAREN;}
 {INTEGER}  {charPos+=yyleng; return INTEGER;}
