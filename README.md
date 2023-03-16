@@ -28,6 +28,8 @@
 | word with optional number following it with no spaces | IDENTIFIER | 
 | { | STARTBRACKET |
 | } | CLOSEBRACKET |
+| [ | STARTBRACE |
+| ] | ENDBRACE |
 | ; | ENDLINE |
 | ( | STARTPAREN |
 | ) | CLOSEPAREN |
@@ -37,6 +39,7 @@
 | - | SUBTRACT |
 | / | DIVIDE |
 | * | MULTIPLICATION |
+| % | MOD |
 | -> | ASSIGNMENT |
 | < | LESSTHAN |
 | > | GREATERTHAN |
@@ -52,6 +55,7 @@
 | faire | DO| 
 | contribution | INPUT |
 | sortir | OUTPUT |
+| break | BREAK |
 
 ## Some Language Rules
   A valid identifier can start with a lower case or upper case letter. An identifier may contain a number, but only after the first character. Identifiers also don't have a length limit. The language is case sensitive. Whitespaces are ignored and are not significant. We will signify that a line of code has ended with a semicolon and code blocks will be wraped in curley braces ex: { # some code }.
