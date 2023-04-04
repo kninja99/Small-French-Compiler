@@ -1,5 +1,3 @@
-# CS152-Project-Group3
-
 ### Language Name: Petits Programmeurs Français
 
 ### Compiler Name: Petit Compilateur Français
